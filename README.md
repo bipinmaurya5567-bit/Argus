@@ -1,4 +1,4 @@
-﻿<p align="center">
+<p align="center">
   <img src="docs/argus-wordmark.png" alt="Argus" width="280">
 </p>
 
@@ -18,17 +18,17 @@
 </p>
 
 <p align="center">
-  <img src="docs/argus.jpg" alt="Argus interface">
+  <em>A dark-themed AI workspace with a sidebar featuring Search, New Chat, Chats, Email, Tools, Calendar, Compare, Cookbook, Deep Research, Gallery, Library, Brainy, Notes, Tasks, and Theme.</em>
 </p>
 
 ---
 
 ## Quick Start
 
-> `dev` is the default branch and gets the newest changes first. Use [`main`](https://github.com/pewdiepie-archdaemon/argus/tree/main) if you want the more curated branch.
+> `dev` is the default branch and gets the newest changes first. Use [`main`](https://github.com/bipinmaurya5567-bit/Argus/tree/main) if you want the more curated branch.
 
 ```bash
-git clone https://github.com/pewdiepie-archdaemon/argus.git
+git clone https://github.com/bipinmaurya5567-bit/Argus.git
 cd argus
 cp .env.example .env
 docker compose up -d --build
@@ -63,11 +63,11 @@ Argus is a self-hosted workspace with powerful local tools. Keep auth enabled, k
 
 ## Star History
 
-<a href="https://www.star-history.com/?repos=pewdiepie-archdaemon%2Fargus&type=date&legend=top-left">
+<a href="https://www.star-history.com/?repos=bipinmaurya5567-bit%2FArgus&type=date&legend=top-left">
  <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=pewdiepie-archdaemon/argus&type=date&theme=dark&legend=top-left" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=pewdiepie-archdaemon/argus&type=date&legend=top-left" />
-   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=pewdiepie-archdaemon/argus&type=date&legend=top-left" />
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=bipinmaurya5567-bit/Argus&type=date&theme=dark&legend=top-left" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=bipinmaurya5567-bit/Argus&type=date&legend=top-left" />
+   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=bipinmaurya5567-bit/Argus&type=date&legend=top-left" />
  </picture>
 </a>
 
