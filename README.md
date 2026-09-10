@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/argus-wordmark.png" alt="Argus" width="280">
+  <h1>🔺 Argus</h1>
 </p>
 
 <p align="center">
