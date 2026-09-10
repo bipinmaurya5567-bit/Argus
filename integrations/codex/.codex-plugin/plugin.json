@@ -1,22 +1,22 @@
-{
-  "name": "odysseus",
+﻿{
+  "name": "argus",
   "version": "0.1.1",
-  "description": "Connect Codex to a scoped Odysseus instance.",
+  "description": "Connect Codex to a scoped Argus instance.",
   "author": {
-    "name": "Odysseus"
+    "name": "Argus"
   },
   "skills": "./skills/",
   "interface": {
-    "displayName": "Odysseus",
-    "shortDescription": "Use scoped Odysseus tools from Codex.",
-    "longDescription": "Connects Codex terminal sessions to Odysseus through user-controlled scoped API tokens. Codex must use /api/codex/* endpoints so Odysseus Settings can enforce tool access.",
-    "developerName": "Odysseus",
+    "displayName": "Argus",
+    "shortDescription": "Use scoped Argus tools from Codex.",
+    "longDescription": "Connects Codex terminal sessions to Argus through user-controlled scoped API tokens. Codex must use /api/codex/* endpoints so Argus Settings can enforce tool access.",
+    "developerName": "Argus",
     "category": "Productivity",
     "capabilities": [
       "todos",
       "email",
       "scoped-api"
     ],
-    "defaultPrompt": "Use Odysseus only through configured scoped access. Check capabilities before reading or writing data."
+    "defaultPrompt": "Use Argus only through configured scoped access. Check capabilities before reading or writing data."
   }
 }

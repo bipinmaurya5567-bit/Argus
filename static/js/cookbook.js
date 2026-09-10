@@ -1,4 +1,4 @@
-// ============================================
+﻿// ============================================
 // COOKBOOK MODULE (v2 — simplified)
 // What Fits? + Saved presets, inline action panels
 // ============================================
@@ -781,7 +781,7 @@ async function _fetchDependencies() {
       if (winBlocked) return `<span class="cookbook-dep-tag cookbook-dep-na">N/A</span>`;
       if (pkg.installed && isSystemDep) return `<span class="cookbook-dep-tag cookbook-dep-installed" title="Found on selected server">Installed</span>`;
       if (pkg.installed && pkg.pip_update_available === false) {
-        const tip = esc(pkg.update_note || pkg.status_note || 'Found externally; update outside Odysseus.');
+        const tip = esc(pkg.update_note || pkg.status_note || 'Found externally; update outside Argus.');
         return `<span class="cookbook-dep-tag cookbook-dep-installed" title="${tip}">Installed</span>`;
       }
       if (pkg.installed) return `<button class="cookbook-dep-tag cookbook-dep-installed cookbook-dep-installed-btn" title="Installed — click for actions"><span class="cookbook-dep-installed-label">Installed</span><span class="cookbook-dep-caret">&#9662;</span></button>`;
@@ -915,7 +915,7 @@ async function _fetchDependencies() {
     const _serverDeps = pkgs.filter(p => p.target !== 'local');
 
     list.innerHTML = [
-      _viewingRemote ? '' : _section('Odysseus app', 'Run inside the Odysseus app itself.', _appDeps),
+      _viewingRemote ? '' : _section('Argus app', 'Run inside the Argus app itself.', _appDeps),
       _section('Server', 'Run on the server chosen above (Local, or a remote box over SSH).', _serverDeps),
     ].join('');
 
@@ -2230,7 +2230,7 @@ function _renderRecipes() {
   // after browsing, not a header.
   html += '<div class="hwfit-list-footer" style="display:none;">'
        + 'Don\'t see a model? '
-       + '<a href="https://github.com/pewdiepie-archdaemon/odysseus/discussions/1962" target="_blank" rel="noopener" style="color:var(--accent,var(--red));text-decoration:none;display:inline-flex;align-items:center;gap:4px;vertical-align:middle;position:relative;top:-1px;">'
+       + '<a href="https://github.com/pewdiepie-archdaemon/argus/discussions/1962" target="_blank" rel="noopener" style="color:var(--accent,var(--red));text-decoration:none;display:inline-flex;align-items:center;gap:4px;vertical-align:middle;position:relative;top:-1px;">'
        + 'Request it →'
        + '<svg width="11" height="11" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" style="flex-shrink:0;"><path d="M8 0C3.58 0 0 3.58 0 8a8 8 0 0 0 5.47 7.59c.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>'
        + '</a>'
@@ -2286,7 +2286,7 @@ function _renderRecipes() {
   html += _buildServerOpts(false);
   html += '</select>';
   html += '</div>';
-  html += '<p class="memory-desc doclib-desc">Optional packages that extend Odysseus capabilities.</p>';
+  html += '<p class="memory-desc doclib-desc">Optional packages that extend Argus capabilities.</p>';
   html += '<div class="doclib-grid" id="cookbook-deps-list"></div>';
   html += '</div></div>';
 
@@ -2325,7 +2325,7 @@ function _renderRecipes() {
    // the same `.cal-add-btn-text` rules, so styling stays consistent.
   html += '<button class="cal-add-btn cal-add-btn-text" id="cookbook-server-add" title="Add server" style="margin-left:auto;"><span class="cal-add-plus">+</span><span class="cal-add-label">Add</span></button>';
   html += '</div>';
-  html += '<p class="memory-desc doclib-desc">Configure SSH servers, install Odysseus keys, choose model directories, and set the default server. Local is this machine.</p>';
+  html += '<p class="memory-desc doclib-desc">Configure SSH servers, install Argus keys, choose model directories, and set the default server. Local is this machine.</p>';
   html += '<div class="memory-toolbar cookbook-servers-toolbar" style="margin-top:4px;">';
   html += `<div id="cookbook-servers-list">`;
   for (let i = 0; i < _es.servers.length; i++) {

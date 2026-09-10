@@ -1,4 +1,4 @@
-import os
+﻿import os
 import logging
 import sqlite3
 from datetime import datetime, timezone
@@ -1878,8 +1878,8 @@ def _migrate_chat_messages_fts():
     try:
         conn = sqlite3.connect(db_path)
         try:
-            conn.execute("CREATE VIRTUAL TABLE IF NOT EXISTS temp._odysseus_fts5_probe USING fts5(content)")
-            conn.execute("DROP TABLE IF EXISTS temp._odysseus_fts5_probe")
+            conn.execute("CREATE VIRTUAL TABLE IF NOT EXISTS temp._argus_fts5_probe USING fts5(content)")
+            conn.execute("DROP TABLE IF EXISTS temp._argus_fts5_probe")
         except Exception as e:
             logging.getLogger(__name__).warning(f"chat_messages FTS migration skipped; FTS5 unavailable: {e}")
             return

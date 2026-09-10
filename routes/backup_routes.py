@@ -1,4 +1,4 @@
-"""Backup routes — export/import user data (memories, presets, settings, skills, preferences)."""
+﻿"""Backup routes — export/import user data (memories, presets, settings, skills, preferences)."""
 
 import json
 import logging
@@ -52,7 +52,7 @@ def setup_backup_routes(memory_manager, preset_manager, skills_manager) -> APIRo
             "preferences": preferences,
         }
 
-        filename = f"odysseus_backup_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
+        filename = f"argus_backup_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
         return Response(
             content=json.dumps(export_data, indent=2, ensure_ascii=False),
             media_type="application/json",

@@ -1,10 +1,10 @@
-import os
+﻿import os
 import tempfile
 from pathlib import Path
 
 import pytest
 
-_tmp_data = Path(tempfile.mkdtemp(prefix="odysseus-email-imap-test-"))
+_tmp_data = Path(tempfile.mkdtemp(prefix="argus-email-imap-test-"))
 os.environ.setdefault("DATA_DIR", str(_tmp_data))
 os.environ.setdefault("DATABASE_URL", f"sqlite:///{_tmp_data / 'app.db'}")
 

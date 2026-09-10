@@ -1,4 +1,4 @@
-"""
+﻿"""
 rag_vector.py
 
 Vector-based RAG using ChromaDB for storage and API-based embeddings.
@@ -37,7 +37,7 @@ DEFAULT_FILE_EXTENSIONS: Set[str] = {
 VECTOR_WEIGHT = 0.7
 KEYWORD_WEIGHT = 0.3
 
-COLLECTION_NAME = "odysseus_rag"
+COLLECTION_NAME = "argus_rag"
 
 
 def _generate_doc_id(text: str, owner: str = "") -> str:

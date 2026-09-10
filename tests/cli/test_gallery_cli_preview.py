@@ -1,4 +1,4 @@
-"""Regression: gallery CLI image serialization must tolerate a non-string prompt.
+﻿"""Regression: gallery CLI image serialization must tolerate a non-string prompt.
 
 `_serialize_image` did `(i.prompt or "")[:200]`. A non-string prompt is truthy,
 so `123[:200]` raised TypeError. `_preview_text` coerces non-strings to "".
@@ -11,7 +11,7 @@ from tests.helpers.db_stubs import make_core_db_stub
 
 def test_preview_text_ignores_non_string(monkeypatch):
     make_core_db_stub(monkeypatch, models=["GalleryImage", "GalleryAlbum"])
-    cli = load_script("odysseus-gallery")
+    cli = load_script("argus-gallery")
     assert cli._preview_text(None) == ""
     assert cli._preview_text(123) == ""
     assert cli._preview_text("p" * 250) == "p" * 200
@@ -19,7 +19,7 @@ def test_preview_text_ignores_non_string(monkeypatch):
 
 def test_serialize_image_does_not_crash_on_non_string_prompt(monkeypatch):
     make_core_db_stub(monkeypatch, models=["GalleryImage", "GalleryAlbum"])
-    cli = load_script("odysseus-gallery")
+    cli = load_script("argus-gallery")
     img = SimpleNamespace(
         id="i1", filename="a.png", prompt=123, model=None, size=None, tags=None,
         favorite=0, album_id=None, session_id=None, width=1, height=1, file_size=1,

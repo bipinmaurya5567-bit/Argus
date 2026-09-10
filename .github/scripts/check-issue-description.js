@@ -1,4 +1,4 @@
-// @ts-check
+﻿// @ts-check
 'use strict';
 
 /** @param {{ github: import('@octokit/rest').Octokit, context: import('@actions/github').context, core: import('@actions/core') }} */
@@ -42,7 +42,7 @@ module.exports = async ({ github, context, core }) => {
 
     case 'bug': {
       if (!section('Install Method')) {
-        failures.push('**Install Method** — select how you installed Odysseus');
+        failures.push('**Install Method** — select how you installed Argus');
       }
 
       if (!section('Operating System')) {

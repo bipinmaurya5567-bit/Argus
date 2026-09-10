@@ -1,4 +1,4 @@
-"""Regression guard for the README title presentation.
+﻿"""Regression guard for the README title presentation.
 
 Originally (#1390) the README opened with an ASCII-art banner that had to live
 inside a ``` code fence, otherwise GitHub's markdown collapsed its leading
@@ -23,10 +23,10 @@ def _fenced_segments(text: str):
 
 
 def test_readme_opens_with_wordmark_title():
-    # The README must still open with a recognizable Odysseus title: now the
+    # The README must still open with a recognizable Argus title: now the
     # centered wordmark image rather than an H1 / ASCII banner.
     head = "\n".join(README.read_text(encoding="utf-8").splitlines()[:15])
-    assert 'alt="Odysseus"' in head, "README must open with the Odysseus wordmark image"
+    assert 'alt="Argus"' in head, "README must open with the Argus wordmark image"
 
 
 def test_reintroduced_ascii_banner_stays_fenced():

@@ -1,4 +1,4 @@
-import io
+﻿import io
 
 import pytest
 
@@ -6,7 +6,7 @@ from tests.helpers.cli_loader import load_script
 
 
 def test_state_set_rejects_non_object_json(tmp_path, monkeypatch, capsys):
-    cli = load_script("odysseus-cookbook")
+    cli = load_script("argus-cookbook")
     cli._STATE_PATH = tmp_path / "cookbook_state.json"
     monkeypatch.setattr(cli.sys, "stdin", io.StringIO("[]"))
 

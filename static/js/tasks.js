@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Tasks Module — scheduled recurring LLM prompts.
  */
 
@@ -1083,7 +1083,7 @@ function _showForm(existing, initTaskType, initTriggerType) {
         ['razor', 'Razor'],
         ['nietzsche', 'Nietzsche'],
         ['spark', 'Spark'],
-        ['odysseus', 'Odysseus'],
+        ['argus', 'Argus'],
       ];
       const _curPersona = (existing?.character_id || '').toLowerCase();
       const _personaOptsHtml = _personaOpts.map(([v, label]) =>

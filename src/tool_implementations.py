@@ -1,4 +1,4 @@
-"""
+﻿"""
 tool_implementations.py
 
 Extracted tool implementation functions (do_* and helpers) from agent_tools.py.
@@ -665,7 +665,7 @@ async def do_manage_endpoints(content: str, owner: Optional[str] = None) -> Dict
 #
 # Commands that can execute arbitrary code regardless of their arguments. These
 # are NEVER accepted on the manage_mcp agent path, even if an operator lists one
-# in ODYSSEUS_MCP_ALLOWED_COMMANDS -- a stdio server that genuinely needs an
+# in ARGUS_MCP_ALLOWED_COMMANDS -- a stdio server that genuinely needs an
 # interpreter or package runner must be registered via the trusted admin route.
 _MCP_DENIED_COMMANDS = frozenset({
     "sh", "bash", "zsh", "fish", "dash", "ksh", "csh", "tcsh", "ash", "busybox",
@@ -707,10 +707,10 @@ _MCP_DANGEROUS_ENV = frozenset({
 
 def _mcp_allowed_commands() -> set:
     """Operator-configured allowlist of safe MCP launcher basenames for the agent
-    path. Empty by default; set ODYSSEUS_MCP_ALLOWED_COMMANDS (comma-separated)
+    path. Empty by default; set ARGUS_MCP_ALLOWED_COMMANDS (comma-separated)
     to opt specific trusted binaries in. Denied commands are rejected even if
     listed here."""
-    raw = os.environ.get("ODYSSEUS_MCP_ALLOWED_COMMANDS", "")
+    raw = os.environ.get("ARGUS_MCP_ALLOWED_COMMANDS", "")
     return {c.strip().lower() for c in raw.split(",") if c.strip()}
 
 
@@ -747,7 +747,7 @@ def _validate_mcp_command(command, args, env) -> Optional[str]:
     if base not in _mcp_allowed_commands():
         return (
             f"command '{command}' is not in the MCP allowlist. Add it to "
-            "ODYSSEUS_MCP_ALLOWED_COMMANDS if you trust it, or register the "
+            "ARGUS_MCP_ALLOWED_COMMANDS if you trust it, or register the "
             "server via the admin route."
         )
 
@@ -2134,7 +2134,7 @@ async def do_manage_calendar(content: str, owner: Optional[str] = None) -> Dict:
 
 # ── Cookbook tools ──
 
-# In-process loopback base for agent tools that call Odysseus's own API
+# In-process loopback base for agent tools that call Argus's own API
 # (cookbook state, model serve, gallery, email, calendar). We ride the
 # per-process internal token so require_admin lets us through. See
 # core/middleware.py. Resolution (override / APP_PORT / 7000) lives in
@@ -2146,7 +2146,7 @@ def _internal_headers(owner: Optional[str] = None) -> Dict[str, str]:
     from core.middleware import INTERNAL_TOOL_HEADER, INTERNAL_TOOL_TOKEN
     headers = {INTERNAL_TOOL_HEADER: INTERNAL_TOOL_TOKEN}
     if owner:
-        headers["X-Odysseus-Owner"] = owner
+        headers["X-Argus-Owner"] = owner
     return headers
 
 
@@ -2471,7 +2471,7 @@ _APP_API_BLOCKLIST_METHOD_PATH = (
 
 
 async def do_app_api(content: str, owner: Optional[str] = None) -> Dict:
-    """Generic loopback to allowed internal Odysseus API endpoints. Lets the
+    """Generic loopback to allowed internal Argus API endpoints. Lets the
     agent reach the full UI-button surface (cookbook, email, notes,
     calendar, skills, sessions, gallery, research, etc.) without us
     landing a named tool wrapper for every one.
@@ -2982,7 +2982,7 @@ async def do_list_served_models(content: str, owner: Optional[str] = None) -> Di
                 # Prefer a window around a Python traceback if one exists,
                 # falling back to the last 30 lines. The previous 6-line
                 # tail showed only the post-crash bash prompt / neofetch
-                # banner ("Locale: C / Ubuntu_Odysseus ❯") — useless for
+                # banner ("Locale: C / Ubuntu_Argus ❯") — useless for
                 # diagnosis. The traceback we want is usually 50-200 lines
                 # earlier in the buffer.
                 _tail_lines = tail.splitlines()
@@ -3154,7 +3154,7 @@ async def do_tail_serve_output(content: str, owner: Optional[str] = None) -> Dic
         except HTTPException as e:
             return {"error": str(getattr(e, "detail", e)), "exit_code": 1}
 
-    # Prefer the persisted /tmp/odysseus-tmux/SESSION.log file over the
+    # Prefer the persisted /tmp/argus-tmux/SESSION.log file over the
     # live tmux pane. The pane is what the user would see scrolling on
     # their screen — including the post-crash neofetch banner and the
     # idle bash prompt that overwrites the actual traceback the moment
@@ -3162,7 +3162,7 @@ async def do_tail_serve_output(content: str, owner: Optional[str] = None) -> Dic
     # process and survives the crash unchanged. We only fall back to
     # the pane when the log file doesn't exist (older sessions launched
     # before the tmux+tee wrapper was added).
-    log_path = f"/tmp/odysseus-tmux/{session_id}.log"
+    log_path = f"/tmp/argus-tmux/{session_id}.log"
     pane_inner = f"tmux capture-pane -t {shlex.quote(session_id)} -p -S -{tail} 2>/dev/null"
     file_inner = f"tail -n {tail} {shlex.quote(log_path)} 2>/dev/null"
     inner = (

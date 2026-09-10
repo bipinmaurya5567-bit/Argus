@@ -1,4 +1,4 @@
-# PR Blocker Audit
+﻿# PR Blocker Audit
 
 `scripts/pr_blocker_audit.py` is a small, read-only triage helper for maintainers who need to inspect open pull request overlap before reviewing or starting related work.
 
@@ -19,7 +19,7 @@ It is a triage helper, not a replacement for maintainer judgment.
 - It does not post comments.
 - It does not review, approve, label, close, merge, or otherwise mutate PRs.
 - It does not add or run GitHub Actions.
-- It does not import the Odysseus application package.
+- It does not import the Argus application package.
 - It does not claim that a PR is definitely blocked or duplicated.
 
 ## Read-only safety guarantee

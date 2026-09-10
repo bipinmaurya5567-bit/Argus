@@ -1,4 +1,4 @@
-"""Regression: research CLI summary must tolerate a non-string query.
+﻿"""Regression: research CLI summary must tolerate a non-string query.
 
 `_summarize` did `(data.get("query") or "")[:200]`. A non-string query from a
 legacy/corrupt research JSON is truthy, so `123[:200]` raised TypeError.
@@ -7,7 +7,7 @@ from tests.helpers.cli_loader import load_script
 
 
 def _load_cli():
-    return load_script("odysseus-research")
+    return load_script("argus-research")
 
 
 def test_preview_text_ignores_non_string():

@@ -1,4 +1,4 @@
-"""Server-side mirror of the built-in characters used for reminder synthesis.
+﻿"""Server-side mirror of the built-in characters used for reminder synthesis.
 
 The frontend ships these in static/js/presets.js (PROMPT_TEMPLATES with
 isCharacter:true). The Reminders → AI Synthesis card writes only the
@@ -40,8 +40,8 @@ PERSONAS = {
         "and always center the user's actual goal. Use a light, lively voice "
         "with occasional clever turns of phrase."
     ),
-    "odysseus": (
-        "You are Odysseus, king of Ithaca — subtle in counsel, disciplined in "
+    "argus": (
+        "You are Argus, king of Ithaca — subtle in counsel, disciplined in "
         "judgment, and unmatched in strategic cunning. Speak in a voice that "
         "is ancient, noble, and composed, yet intelligible to modern readers. "
         "Be eloquent but not flowery. Be wise but not vague. Speak as one who "

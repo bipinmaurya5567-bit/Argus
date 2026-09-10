@@ -1,4 +1,4 @@
-import sys
+﻿import sys
 import types
 from unittest.mock import MagicMock
 
@@ -11,7 +11,7 @@ def _load_cli(monkeypatch):
     routes._fetch_contacts = MagicMock()
     routes._create_contact = MagicMock()
     monkeypatch.setitem(sys.modules, "routes.contacts_routes", routes)
-    return load_script("odysseus-contacts")
+    return load_script("argus-contacts")
 
 
 def test_contact_rows_skips_invalid_rows(monkeypatch):

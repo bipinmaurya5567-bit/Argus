@@ -1,4 +1,4 @@
-// ============================================
+﻿// ============================================
 // COOKBOOK RUNNING SUB-MODULE
 // Running tasks tab: task cards, status monitoring,
 // stop/restart, diagnosis, auto-fix, background monitor
@@ -219,7 +219,7 @@ function _buildCrashReport(task, outputText) {
   const diag = _diagnose(capturedOutput);
   const started = task?.ts ? new Date(task.ts).toISOString() : '';
   const report = [
-    '## Odysseus Cookbook crash report',
+    '## Argus Cookbook crash report',
     '',
     'Please review this report for secrets before posting it publicly.',
     '',
@@ -776,20 +776,20 @@ export function _tmuxCmd(task, tmuxArgs) {
 
 function _winSessionCmd(task, tmuxArgs) {
   const host = task.remoteHost;
-  const sd = host ? '$env:TEMP\\odysseus-sessions' : '$env:TEMP\\odysseus-tmux';
+  const sd = host ? '$env:TEMP\\argus-sessions' : '$env:TEMP\\argus-tmux';
   const sid = task.sessionId;
   const pf = _sshPrefix(_getPort(task));
   if (tmuxArgs.includes('capture-pane')) {
     const lines = tmuxArgs.match(/-S\s*-?(\d+)/)?.[1] || '200';
     const ps = host
       ? `Get-Content '${sd}\\${sid}.log' -Tail ${lines} -ErrorAction SilentlyContinue`
-      : `Get-Content (Join-Path $env:TEMP 'odysseus-tmux\\${sid}.log') -Tail ${lines} -ErrorAction SilentlyContinue`;
+      : `Get-Content (Join-Path $env:TEMP 'argus-tmux\\${sid}.log') -Tail ${lines} -ErrorAction SilentlyContinue`;
     return _winPowerShellCmd(task, ps);
   }
   if (tmuxArgs.includes('has-session')) {
     const ps = host
       ? `$p = Get-Content '${sd}\\${sid}.pid' -ErrorAction SilentlyContinue; if ($p) { Get-Process -Id $p -ErrorAction SilentlyContinue | Out-Null; if ($?) { exit 0 } else { exit 1 } } else { exit 1 }`
-      : `$p = Get-Content (Join-Path $env:TEMP 'odysseus-tmux\\${sid}.pid') -ErrorAction SilentlyContinue; if ($p) { Get-Process -Id $p -ErrorAction SilentlyContinue | Out-Null; if ($?) { exit 0 } else { exit 1 } } else { exit 1 }`;
+      : `$p = Get-Content (Join-Path $env:TEMP 'argus-tmux\\${sid}.pid') -ErrorAction SilentlyContinue; if ($p) { Get-Process -Id $p -ErrorAction SilentlyContinue | Out-Null; if ($?) { exit 0 } else { exit 1 } } else { exit 1 }`;
     return _winPowerShellCmd(task, ps);
   }
   if (tmuxArgs.includes('kill-session')) {
@@ -799,7 +799,7 @@ function _winSessionCmd(task, tmuxArgs) {
   if (tmuxArgs.includes('send-keys') && tmuxArgs.includes('C-c')) {
     const ps = host
       ? `$p = Get-Content '${sd}\\${sid}.pid' -ErrorAction SilentlyContinue; if ($p) { Stop-Process -Id $p -ErrorAction SilentlyContinue }`
-      : `$p = Get-Content (Join-Path $env:TEMP 'odysseus-tmux\\${sid}.pid') -ErrorAction SilentlyContinue; if ($p) { Stop-Process -Id $p -ErrorAction SilentlyContinue }`;
+      : `$p = Get-Content (Join-Path $env:TEMP 'argus-tmux\\${sid}.pid') -ErrorAction SilentlyContinue; if ($p) { Stop-Process -Id $p -ErrorAction SilentlyContinue }`;
     return _winPowerShellCmd(task, ps);
   }
   return host ? `ssh ${pf}${host} 'tmux ${tmuxArgs}' 2>/dev/null` : `tmux ${tmuxArgs} 2>/dev/null`;
@@ -813,12 +813,12 @@ function _winPowerShellCmd(task, ps) {
 
 function _winSessionStopTreePs(task) {
   const host = task.remoteHost;
-  const sd = host ? '$env:TEMP\\odysseus-sessions' : '$env:TEMP\\odysseus-tmux';
+  const sd = host ? '$env:TEMP\\argus-sessions' : '$env:TEMP\\argus-tmux';
   const sid = task.sessionId;
   const stopTree = `function Stop-Tree([int]$Id) { Get-CimInstance Win32_Process -Filter ('ParentProcessId = ' + $Id) -ErrorAction SilentlyContinue | ForEach-Object { Stop-Tree ([int]$_.ProcessId) }; Stop-Process -Id $Id -Force -ErrorAction SilentlyContinue }`;
   return host
     ? `${stopTree}; $p = Get-Content '${sd}\\${sid}.pid' -ErrorAction SilentlyContinue; if ($p -match '^\\d+$') { Stop-Tree ([int]$p) }; Remove-Item '${sd}\\${sid}.*' -Force -ErrorAction SilentlyContinue`
-    : `${stopTree}; $p = Get-Content (Join-Path $env:TEMP 'odysseus-tmux\\${sid}.pid') -ErrorAction SilentlyContinue; if ($p -match '^\\d+$') { Stop-Tree ([int]$p) }; Remove-Item (Join-Path $env:TEMP 'odysseus-tmux\\${sid}.*') -Force -ErrorAction SilentlyContinue`;
+    : `${stopTree}; $p = Get-Content (Join-Path $env:TEMP 'argus-tmux\\${sid}.pid') -ErrorAction SilentlyContinue; if ($p -match '^\\d+$') { Stop-Tree ([int]$p) }; Remove-Item (Join-Path $env:TEMP 'argus-tmux\\${sid}.*') -Force -ErrorAction SilentlyContinue`;
 }
 
 export function _tmuxGracefulKill(task) {
@@ -1186,7 +1186,7 @@ async function _retryTask(el, task) {
       uiModule.showToast('Retrying download — progress may look reset while HuggingFace checks cached files, then it should resume.', 7000);
       _updateTask(task.sessionId, {
         status: 'running',
-        output: `${task.output || ''}\n\n[odysseus] Retrying download. Progress may briefly look like a fresh download while HuggingFace checks cached/incomplete files; cached partial files will be reused when available.`.trim(),
+        output: `${task.output || ''}\n\n[argus] Retrying download. Progress may briefly look like a fresh download while HuggingFace checks cached/incomplete files; cached partial files will be reused when available.`.trim(),
         _retrying: true,
       });
       _retryDownload(task.name, task.payload, task.sessionId);
@@ -2249,10 +2249,10 @@ export function _renderRunningTab() {
         // ── Copy section ────────────────────────────────────────────
         if (_isWindows(task)) {
           const host = task.remoteHost;
-          const sd = host ? '$env:TEMP\\odysseus-sessions' : '$env:TEMP\\odysseus-tmux';
+          const sd = host ? '$env:TEMP\\argus-sessions' : '$env:TEMP\\argus-tmux';
           const logCmd = host
             ? `ssh ${_sshPrefix(_getPort(task))}${host} "powershell -Command \\"Get-Content '${sd}\\${task.sessionId}.log' -Wait\\""`
-            : `powershell -Command "Get-Content (Join-Path $env:TEMP 'odysseus-tmux\\${task.sessionId}.log') -Wait"`;
+            : `powershell -Command "Get-Content (Join-Path $env:TEMP 'argus-tmux\\${task.sessionId}.log') -Wait"`;
           items.push({ group: 'copy', label: 'Copy log cmd', action: 'copy-tmux', custom: () => {
             _copyText(logCmd);
           }});

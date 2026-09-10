@@ -1,4 +1,4 @@
-from types import SimpleNamespace
+﻿from types import SimpleNamespace
 
 from tests.helpers.cli_loader import load_script
 from tests.helpers.db_stubs import make_core_db_stub
@@ -6,7 +6,7 @@ from tests.helpers.db_stubs import make_core_db_stub
 
 def test_serialize_ignores_invalid_note_items(monkeypatch):
     make_core_db_stub(monkeypatch, models=["Note"])
-    cli = load_script("odysseus-notes")
+    cli = load_script("argus-notes")
     note = SimpleNamespace(
         id="n1",
         title="Checklist",
@@ -28,7 +28,7 @@ def test_serialize_ignores_invalid_note_items(monkeypatch):
 
 def test_serialize_keeps_list_note_items(monkeypatch):
     make_core_db_stub(monkeypatch, models=["Note"])
-    cli = load_script("odysseus-notes")
+    cli = load_script("argus-notes")
     note = SimpleNamespace(
         id="n1",
         title="Checklist",

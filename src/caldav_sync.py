@@ -1,4 +1,4 @@
-"""CalDAV → local SQLite sync.
+﻿"""CalDAV → local SQLite sync.
 
 The Settings UI lets users save CalDAV credentials, but the original
 sync path was removed when calendar storage was migrated to SQLite.
@@ -48,7 +48,7 @@ _BLOCKED_HOSTS = {
 
 
 def _private_caldav_allowed() -> bool:
-    return os.environ.get("ODYSSEUS_ALLOW_PRIVATE_CALDAV", "0").lower() in {"1", "true", "yes"}
+    return os.environ.get("ARGUS_ALLOW_PRIVATE_CALDAV", "0").lower() in {"1", "true", "yes"}
 
 
 def _validate_caldav_address(addr: ipaddress._BaseAddress) -> None:
@@ -63,7 +63,7 @@ def _validate_caldav_address(addr: ipaddress._BaseAddress) -> None:
     ):
         raise ValueError("CalDAV URL host is not allowed")
     if addr.is_private and not _private_caldav_allowed():
-        raise ValueError("Private CalDAV IPs require ODYSSEUS_ALLOW_PRIVATE_CALDAV=1")
+        raise ValueError("Private CalDAV IPs require ARGUS_ALLOW_PRIVATE_CALDAV=1")
 
 
 def _validate_caldav_ip(host: str) -> None:

@@ -1,4 +1,4 @@
-"""Regression: search query helpers must tolerate a non-string query.
+﻿"""Regression: search query helpers must tolerate a non-string query.
 
 These helpers did `query.strip()`, `query.lower()`, `re.split(..., query)`,
 `re.search(..., query)` directly, so a None / non-string query (e.g. from a
@@ -15,7 +15,7 @@ _PATH = Path(__file__).resolve().parents[1] / "services" / "search" / "query.py"
 def _load():
     # Load the module file directly so the package __init__ (which imports
     # httpx) isn't required.
-    loader = importlib.machinery.SourceFileLoader("odysseus_search_query", str(_PATH))
+    loader = importlib.machinery.SourceFileLoader("argus_search_query", str(_PATH))
     spec = importlib.util.spec_from_loader(loader.name, loader)
     module = importlib.util.module_from_spec(spec)
     loader.exec_module(module)

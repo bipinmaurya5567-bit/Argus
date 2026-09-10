@@ -1,4 +1,4 @@
-import io
+﻿import io
 import tarfile
 from pathlib import Path
 from types import SimpleNamespace
@@ -9,7 +9,7 @@ from tests.helpers.cli_loader import load_script
 
 
 def _load_backup_cli():
-    return load_script("odysseus-backup")
+    return load_script("argus-backup")
 
 
 def _patch_repo(module, monkeypatch, root: Path):

@@ -1,4 +1,4 @@
-// static/js/ui.js
+﻿// static/js/ui.js
 
 /**
  * UI utilities for toasts, modals, scrolling, and user feedback
@@ -165,8 +165,8 @@ function _activateSpaceCard(card) {
 }
 
 function _initHoverCardSpaceToggle() {
-  if (document._odysseusHoverCardSpaceToggle) return;
-  document._odysseusHoverCardSpaceToggle = true;
+  if (document._argusHoverCardSpaceToggle) return;
+  document._argusHoverCardSpaceToggle = true;
   document.addEventListener('pointerover', (e) => {
     _lastPointerClientX = e.clientX;
     _lastPointerClientY = e.clientY;

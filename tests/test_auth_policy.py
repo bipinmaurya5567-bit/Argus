@@ -1,4 +1,4 @@
-"""Tests for auth policy endpoint and password length validation."""
+﻿"""Tests for auth policy endpoint and password length validation."""
 
 import asyncio
 import importlib
@@ -180,7 +180,7 @@ def test_change_password_rejects_short_password(tmp_path):
     mgr.create_user("alice", "old-password", is_admin=False)
     endpoint, ChangePasswordRequest = _change_password_endpoint(mgr)
     request = SimpleNamespace(
-        cookies={"odysseus_session": "current-token"},
+        cookies={"argus_session": "current-token"},
         client=SimpleNamespace(host="127.0.0.1"),
     )
     # Mock get_username_for_token to return alice

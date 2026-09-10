@@ -1,4 +1,4 @@
-"""Regression tests for issues found during code review."""
+﻿"""Regression tests for issues found during code review."""
 
 import importlib
 import json
@@ -679,7 +679,7 @@ async def test_email_mcp_dispatch_includes_hidden_owner(monkeypatch):
     assert desc == "mcp: mcp__email__list_emails"
     assert result["exit_code"] == 0
     assert fake.calls == [
-        ("mcp__email__list_emails", {"folder": "INBOX", "_odysseus_owner": "alice"}),
+        ("mcp__email__list_emails", {"folder": "INBOX", "_argus_owner": "alice"}),
     ]
 
 

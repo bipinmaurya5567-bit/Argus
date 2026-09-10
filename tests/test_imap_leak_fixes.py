@@ -1,4 +1,4 @@
-"""Regression tests for IMAP connection leak fixes.
+﻿"""Regression tests for IMAP connection leak fixes.
 
 Each test forces an exception after _imap_connect() succeeds and asserts
 that conn.logout() is still called exactly once (guaranteed by try/finally).
@@ -16,7 +16,7 @@ import tempfile
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
-_TMP = Path(tempfile.mkdtemp(prefix="odysseus-imap-leak-fixes-"))
+_TMP = Path(tempfile.mkdtemp(prefix="argus-imap-leak-fixes-"))
 os.environ.setdefault("DATA_DIR", str(_TMP))
 os.environ.setdefault("DATABASE_URL", f"sqlite:///{_TMP / 'app.db'}")
 

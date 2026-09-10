@@ -1,11 +1,11 @@
-import json
+﻿import json
 from types import SimpleNamespace
 
 from tests.helpers.cli_loader import load_script
 
 
 def _load_cli():
-    return load_script("odysseus-research")
+    return load_script("argus-research")
 
 
 def test_list_skips_non_object_research_records(tmp_path, monkeypatch):

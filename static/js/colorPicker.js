@@ -1,10 +1,10 @@
-// In-house color picker with live-feedback HSV square, hue bar,
+﻿// In-house color picker with live-feedback HSV square, hue bar,
 // eyedropper, recent colors, and harmony suggestions.
 // Non-invasive: wraps existing <input type="color"> elements —
 // their .value stays the source of truth, and we dispatch 'input'
 // events so existing listeners keep working.
 
-const LS_RECENT = 'odysseus-recent-colors';
+const LS_RECENT = 'argus-recent-colors';
 const MAX_RECENT = 12;
 
 let _popover = null;

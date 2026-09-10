@@ -1,7 +1,7 @@
-# Companion bridge
+﻿# Companion bridge
 
 A thin, additive layer so a LAN client (e.g. a phone) can discover what an
-Odysseus server offers and pair to it, without duplicating any LLM logic.
+Argus server offers and pair to it, without duplicating any LLM logic.
 
 | Method | Path | Auth | Purpose |
 |---|---|---|---|

@@ -1,4 +1,4 @@
-"""mcp email server _decode_header must not inject spaces between parts.
+﻿"""mcp email server _decode_header must not inject spaces between parts.
 
 email.header.decode_header returns plain-text runs WITH their surrounding
 whitespace (e.g. (b"Re: ", None)), so joining parts with " " produced a
@@ -87,7 +87,7 @@ async def test_mcp_email_accounts_are_filtered_by_hidden_owner(tmp_path, monkeyp
     monkeypatch.setattr(es, "APP_DB", str(db_path))
     es._ACCOUNT_CACHE.clear()
 
-    out = await es.call_tool("list_email_accounts", {"_odysseus_owner": "alice"})
+    out = await es.call_tool("list_email_accounts", {"_argus_owner": "alice"})
     text = out[0].text
 
     assert "Alice Mail" in text
@@ -151,7 +151,7 @@ async def test_mcp_send_email_stages_owner_scoped_pending_draft(tmp_path, monkey
             "to": "recipient@example.com",
             "subject": "Review",
             "body": "Please review.",
-            "_odysseus_owner": "alice",
+            "_argus_owner": "alice",
         },
     )
 
@@ -206,11 +206,11 @@ async def test_mcp_draft_email_document_uses_hidden_owner(monkeypatch):
             "to": "recipient@example.com",
             "subject": "Draft subject",
             "body": "Draft body",
-            "_odysseus_owner": "alice",
+            "_argus_owner": "alice",
         },
     )
 
-    assert "Created Odysseus email draft" in out[0].text
+    assert "Created Argus email draft" in out[0].text
     docs = [obj for obj in saved if isinstance(obj, FakeDocument)]
     assert len(docs) == 1
     assert docs[0].owner == "alice"

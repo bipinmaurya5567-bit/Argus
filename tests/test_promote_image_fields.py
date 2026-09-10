@@ -1,4 +1,4 @@
-"""Unit tests for `_promote_image_fields` (PR #2809).
+﻿"""Unit tests for `_promote_image_fields` (PR #2809).
 
 `generate_image` is a text-only MCP tool, so the saved image URL never reaches
 the agent loop's structured forwarding (which renders the image via
@@ -20,12 +20,12 @@ def test_absolute_url_promoted_with_fields():
     prompt/model/size lines."""
     r = _result(
         "Generated image for: a red fox in snow\n"
-        "Direct link: https://odysseus.example.com/api/generated-image/abc123.png\n"
+        "Direct link: https://argus.example.com/api/generated-image/abc123.png\n"
         "model: qwen-image\n"
         "size: 1024x1024"
     )
     _promote_image_fields(r)
-    assert r["image_url"] == "https://odysseus.example.com/api/generated-image/abc123.png"
+    assert r["image_url"] == "https://argus.example.com/api/generated-image/abc123.png"
     assert r["image_prompt"] == "a red fox in snow"
     assert r["image_model"] == "qwen-image"
     assert r["image_size"] == "1024x1024"

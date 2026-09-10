@@ -1,4 +1,4 @@
-import pytest
+﻿import pytest
 
 from src.embedding_lanes import (
     EmbeddingLane,
@@ -148,12 +148,12 @@ def test_build_embedding_lanes_keeps_custom_and_fastembed_dimensions_separate(mo
         lambda: FakeEmbedder(384, "sentence-transformers/all-MiniLM-L6-v2", "local://fastembed"),
     )
 
-    built = build_embedding_lanes("odysseus_memories")
+    built = build_embedding_lanes("argus_memories")
 
     assert [lane.name for lane in built] == [LANE_CUSTOM, LANE_FASTEMBED]
-    assert built[0].collection_name == "odysseus_memories_custom"
+    assert built[0].collection_name == "argus_memories_custom"
     assert built[0].dimension == 768
-    assert built[1].collection_name == "odysseus_memories_fastembed"
+    assert built[1].collection_name == "argus_memories_fastembed"
     assert built[1].dimension == 384
 
     built[0].collection.add(ids=["custom"], embeddings=built[0].encode(["a"]), documents=["a"])
@@ -166,7 +166,7 @@ def test_build_embedding_lanes_keeps_custom_and_fastembed_dimensions_separate(mo
 def test_build_embedding_lanes_recreates_only_custom_when_fingerprint_changes(monkeypatch):
     fake = FakeChroma()
     old_custom = fake.get_or_create_collection(
-        "odysseus_rag_custom",
+        "argus_rag_custom",
         metadata={
             "embedding_lane": "custom",
             "embedding_dimension": 768,
@@ -175,7 +175,7 @@ def test_build_embedding_lanes_recreates_only_custom_when_fingerprint_changes(mo
     )
     old_custom.add(ids=["old"], embeddings=[[0.0] * 768], documents=["old"])
     fast = fake.get_or_create_collection(
-        "odysseus_rag_fastembed",
+        "argus_rag_fastembed",
         metadata={
             "embedding_lane": "fastembed",
             "embedding_dimension": 384,
@@ -189,19 +189,19 @@ def test_build_embedding_lanes_recreates_only_custom_when_fingerprint_changes(mo
     monkeypatch.setattr(lanes, "_build_custom_client", lambda: FakeEmbedder(1024, "bge-large", "http://embeddings/v1"))
     monkeypatch.setattr(lanes, "_build_fastembed_client", lambda: FakeEmbedder(384, "sentence-transformers/all-MiniLM-L6-v2", "local://fastembed"))
 
-    built = build_embedding_lanes("odysseus_rag")
+    built = build_embedding_lanes("argus_rag")
 
-    assert "odysseus_rag_custom" in fake.deleted
-    assert fake.collections["odysseus_rag_custom"].count() == 1
-    assert len(fake.collections["odysseus_rag_custom"].rows["old"]["embedding"]) == 1024
-    assert fake.collections["odysseus_rag_fastembed"].count() == 1
+    assert "argus_rag_custom" in fake.deleted
+    assert fake.collections["argus_rag_custom"].count() == 1
+    assert len(fake.collections["argus_rag_custom"].rows["old"]["embedding"]) == 1024
+    assert fake.collections["argus_rag_fastembed"].count() == 1
     assert built[0].dimension == 1024
 
 
 def test_lane_reset_reembeds_existing_documents_on_fingerprint_change(monkeypatch):
     fake = FakeChroma()
     old_custom = fake.get_or_create_collection(
-        "odysseus_memories_custom",
+        "argus_memories_custom",
         metadata={
             "embedding_lane": "custom",
             "embedding_dimension": 384,
@@ -225,11 +225,11 @@ def test_lane_reset_reembeds_existing_documents_on_fingerprint_change(monkeypatc
 
     monkeypatch.setattr(lanes, "_build_fastembed_client", fail_fastembed)
 
-    built = build_embedding_lanes("odysseus_memories")
+    built = build_embedding_lanes("argus_memories")
 
     assert [lane.name for lane in built] == [LANE_CUSTOM]
-    assert "odysseus_memories_custom" in fake.deleted
-    rebuilt = fake.collections["odysseus_memories_custom"]
+    assert "argus_memories_custom" in fake.deleted
+    rebuilt = fake.collections["argus_memories_custom"]
     assert rebuilt.count() == 1
     assert rebuilt.get()["ids"] == ["existing-memory"]
     assert len(rebuilt.rows["existing-memory"]["embedding"]) == 768
@@ -238,7 +238,7 @@ def test_lane_reset_reembeds_existing_documents_on_fingerprint_change(monkeypatc
 def test_lane_reset_keeps_existing_collection_when_reembed_fails(monkeypatch):
     fake = FakeChroma()
     old_custom = fake.get_or_create_collection(
-        "odysseus_memories_custom",
+        "argus_memories_custom",
         metadata={
             "embedding_lane": "custom",
             "embedding_dimension": 384,
@@ -258,18 +258,18 @@ def test_lane_reset_keeps_existing_collection_when_reembed_fails(monkeypatch):
     monkeypatch.setattr(lanes, "_build_custom_client", lambda: FailingEmbedder(768, "nomic", "http://embeddings/v1"))
     monkeypatch.setattr(lanes, "_build_fastembed_client", lambda: FakeEmbedder(384, "mini", "local://fastembed"))
 
-    built = build_embedding_lanes("odysseus_memories")
+    built = build_embedding_lanes("argus_memories")
 
     assert [lane.name for lane in built] == [LANE_FASTEMBED]
-    assert "odysseus_memories_custom" not in fake.deleted
-    assert fake.collections["odysseus_memories_custom"].count() == 1
-    assert len(fake.collections["odysseus_memories_custom"].rows["existing-memory"]["embedding"]) == 384
+    assert "argus_memories_custom" not in fake.deleted
+    assert fake.collections["argus_memories_custom"].count() == 1
+    assert len(fake.collections["argus_memories_custom"].rows["existing-memory"]["embedding"]) == 384
 
 
 def test_lane_reset_keeps_existing_collection_when_preserve_read_fails(monkeypatch):
     fake = FakeChroma()
     old_custom = fake.get_or_create_collection(
-        "odysseus_memories_custom",
+        "argus_memories_custom",
         metadata={
             "embedding_lane": "custom",
             "embedding_dimension": 384,
@@ -298,17 +298,17 @@ def test_lane_reset_keeps_existing_collection_when_preserve_read_fails(monkeypat
 
     monkeypatch.setattr(lanes, "_build_fastembed_client", fail_fastembed)
 
-    built = build_embedding_lanes("odysseus_memories")
+    built = build_embedding_lanes("argus_memories")
 
     assert built == []
-    assert "odysseus_memories_custom" not in fake.deleted
-    assert "odysseus_memories_custom" in fake.collections
+    assert "argus_memories_custom" not in fake.deleted
+    assert "argus_memories_custom" in fake.collections
 
 
 def test_lane_reset_restores_existing_collection_when_rewrite_fails(monkeypatch):
     fake = FakeChroma()
     old_custom = fake.get_or_create_collection(
-        "odysseus_memories_custom",
+        "argus_memories_custom",
         metadata={
             "embedding_lane": "custom",
             "embedding_dimension": 384,
@@ -321,7 +321,7 @@ def test_lane_reset_restores_existing_collection_when_rewrite_fails(monkeypatch)
         documents=["existing custom memory"],
         metadatas=[{"source": "memory"}],
     )
-    fake.fail_next_add_for["odysseus_memories_custom"] = 1
+    fake.fail_next_add_for["argus_memories_custom"] = 1
     _patch_chroma(monkeypatch, fake)
 
     import src.embedding_lanes as lanes
@@ -333,10 +333,10 @@ def test_lane_reset_restores_existing_collection_when_rewrite_fails(monkeypatch)
 
     monkeypatch.setattr(lanes, "_build_fastembed_client", fail_fastembed)
 
-    built = build_embedding_lanes("odysseus_memories")
+    built = build_embedding_lanes("argus_memories")
 
     assert built == []
-    restored = fake.collections["odysseus_memories_custom"]
+    restored = fake.collections["argus_memories_custom"]
     assert restored.count() == 1
     assert restored.get()["ids"] == ["existing-memory"]
     assert len(restored.rows["existing-memory"]["embedding"]) == 384
@@ -354,10 +354,10 @@ def test_build_embedding_lanes_uses_fastembed_when_custom_unavailable(monkeypatc
     monkeypatch.setattr(lanes, "_build_custom_client", fail_custom)
     monkeypatch.setattr(lanes, "_build_fastembed_client", lambda: FakeEmbedder(384, "mini", "local://fastembed"))
 
-    built = build_embedding_lanes("odysseus_tool_index")
+    built = build_embedding_lanes("argus_tool_index")
 
     assert [lane.name for lane in built] == [LANE_FASTEMBED]
-    assert built[0].collection_name == "odysseus_tool_index_fastembed"
+    assert built[0].collection_name == "argus_tool_index_fastembed"
 
 
 def test_custom_lane_preserves_default_embedding_client_probe(monkeypatch):
@@ -427,8 +427,8 @@ def test_memory_vector_store_writes_both_lanes_and_prefers_custom(monkeypatch):
     store = MemoryVectorStore("data")
     store.add("mem-1", "Nicholai likes direct memory systems")
 
-    assert fake.collections["odysseus_memories_custom"].count() == 1
-    assert fake.collections["odysseus_memories_fastembed"].count() == 1
+    assert fake.collections["argus_memories_custom"].count() == 1
+    assert fake.collections["argus_memories_fastembed"].count() == 1
 
     results = store.search("direct memory", k=5)
     assert results[0]["memory_id"] == "mem-1"
@@ -436,8 +436,8 @@ def test_memory_vector_store_writes_both_lanes_and_prefers_custom(monkeypatch):
 
 
 def test_memory_search_merges_fallback_only_results_before_limit():
-    custom_collection = FakeCollection("odysseus_memories_custom", metadata={"embedding_lane": "custom"})
-    fast_collection = FakeCollection("odysseus_memories_fastembed", metadata={"embedding_lane": "fastembed"})
+    custom_collection = FakeCollection("argus_memories_custom", metadata={"embedding_lane": "custom"})
+    fast_collection = FakeCollection("argus_memories_fastembed", metadata={"embedding_lane": "fastembed"})
     custom_collection.add(
         ids=["old-1", "old-2"],
         embeddings=[[0.0] * 768, [0.0] * 768],
@@ -464,7 +464,7 @@ def test_memory_search_merges_fallback_only_results_before_limit():
         name=LANE_CUSTOM,
         client=FakeEmbedder(768, "nomic", "http://embeddings/v1"),
         collection=custom_collection,
-        collection_name="odysseus_memories_custom",
+        collection_name="argus_memories_custom",
         model="nomic",
         url="http://embeddings/v1",
         dimension=768,
@@ -474,7 +474,7 @@ def test_memory_search_merges_fallback_only_results_before_limit():
         name=LANE_FASTEMBED,
         client=FakeEmbedder(384, "mini", "local://fastembed"),
         collection=fast_collection,
-        collection_name="odysseus_memories_fastembed",
+        collection_name="argus_memories_fastembed",
         model="mini",
         url="local://fastembed",
         dimension=384,
@@ -505,8 +505,8 @@ def test_vector_rag_writes_both_lanes_and_falls_back_to_fastembed(monkeypatch):
 
     rag = VectorRAG()
     assert rag.add_document("session search belongs in tools", {"source": "/tmp/a.md", "owner": "alice"})
-    assert "odysseus_rag_custom" not in fake.collections
-    assert fake.collections["odysseus_rag_fastembed"].count() == 1
+    assert "argus_rag_custom" not in fake.collections
+    assert fake.collections["argus_rag_fastembed"].count() == 1
 
     results = rag.search("session search", k=3, owner="alice")
     assert results[0]["document"] == "session search belongs in tools"
@@ -531,8 +531,8 @@ def test_vector_rag_batch_index_continues_when_custom_lane_fails(monkeypatch, tm
 
     assert result["success"]
     assert result["added_count"] == 1
-    assert fake.collections["odysseus_rag_custom"].count() == 0
-    assert fake.collections["odysseus_rag_fastembed"].count() == 1
+    assert fake.collections["argus_rag_custom"].count() == 0
+    assert fake.collections["argus_rag_fastembed"].count() == 1
 
 
 def test_vector_rag_batch_index_reports_failure_when_all_lanes_fail(monkeypatch, tmp_path):
@@ -552,8 +552,8 @@ def test_vector_rag_batch_index_reports_failure_when_all_lanes_fail(monkeypatch,
     ])
 
     assert not result["success"]
-    assert fake.collections["odysseus_rag_custom"].count() == 0
-    assert fake.collections["odysseus_rag_fastembed"].count() == 0
+    assert fake.collections["argus_rag_custom"].count() == 0
+    assert fake.collections["argus_rag_fastembed"].count() == 0
 
 
 def test_tool_index_indexes_and_retrieves_from_available_lanes(monkeypatch):
@@ -570,8 +570,8 @@ def test_tool_index_indexes_and_retrieves_from_available_lanes(monkeypatch):
     index = ToolIndex()
     index.index_builtin_tools()
 
-    assert fake.collections["odysseus_tool_index_custom"].count() > 0
-    assert fake.collections["odysseus_tool_index_fastembed"].count() > 0
+    assert fake.collections["argus_tool_index_custom"].count() > 0
+    assert fake.collections["argus_tool_index_fastembed"].count() > 0
     assert "bash" in index.retrieve("run a shell command", k=10)
 
 
@@ -579,8 +579,8 @@ def test_tool_index_builtin_indexing_fails_when_all_lanes_fail():
     custom_lane = EmbeddingLane(
         name=LANE_CUSTOM,
         client=FailingEmbedder(768, "nomic", "http://embeddings/v1"),
-        collection=FakeCollection("odysseus_tool_index_custom", metadata={"embedding_lane": "custom"}),
-        collection_name="odysseus_tool_index_custom",
+        collection=FakeCollection("argus_tool_index_custom", metadata={"embedding_lane": "custom"}),
+        collection_name="argus_tool_index_custom",
         model="nomic",
         url="http://embeddings/v1",
         dimension=768,
@@ -589,8 +589,8 @@ def test_tool_index_builtin_indexing_fails_when_all_lanes_fail():
     fast_lane = EmbeddingLane(
         name=LANE_FASTEMBED,
         client=FailingEmbedder(384, "mini", "local://fastembed"),
-        collection=FakeCollection("odysseus_tool_index_fastembed", metadata={"embedding_lane": "fastembed"}),
-        collection_name="odysseus_tool_index_fastembed",
+        collection=FakeCollection("argus_tool_index_fastembed", metadata={"embedding_lane": "fastembed"}),
+        collection_name="argus_tool_index_fastembed",
         model="mini",
         url="local://fastembed",
         dimension=384,
@@ -609,8 +609,8 @@ def test_tool_index_builtin_indexing_fails_when_all_lanes_fail():
 
 
 def test_tool_index_retrieval_continues_when_custom_lane_query_fails():
-    custom_collection = FakeCollection("odysseus_tool_index_custom", metadata={"embedding_lane": "custom"})
-    fast_collection = FakeCollection("odysseus_tool_index_fastembed", metadata={"embedding_lane": "fastembed"})
+    custom_collection = FakeCollection("argus_tool_index_custom", metadata={"embedding_lane": "custom"})
+    fast_collection = FakeCollection("argus_tool_index_fastembed", metadata={"embedding_lane": "fastembed"})
     fast_collection.add(
         ids=["builtin_bash"],
         embeddings=[[0.0] * 384],
@@ -633,7 +633,7 @@ def test_tool_index_retrieval_continues_when_custom_lane_query_fails():
         name=LANE_CUSTOM,
         client=FakeEmbedder(768, "nomic", "http://embeddings/v1"),
         collection=custom_collection,
-        collection_name="odysseus_tool_index_custom",
+        collection_name="argus_tool_index_custom",
         model="nomic",
         url="http://embeddings/v1",
         dimension=768,
@@ -643,7 +643,7 @@ def test_tool_index_retrieval_continues_when_custom_lane_query_fails():
         name=LANE_FASTEMBED,
         client=FakeEmbedder(384, "mini", "local://fastembed"),
         collection=fast_collection,
-        collection_name="odysseus_tool_index_fastembed",
+        collection_name="argus_tool_index_fastembed",
         model="mini",
         url="local://fastembed",
         dimension=384,
@@ -659,8 +659,8 @@ def test_tool_index_retrieval_continues_when_custom_lane_query_fails():
 
 
 def test_tool_index_merges_fallback_tool_results_before_limit():
-    custom_collection = FakeCollection("odysseus_tool_index_custom", metadata={"embedding_lane": "custom"})
-    fast_collection = FakeCollection("odysseus_tool_index_fastembed", metadata={"embedding_lane": "fastembed"})
+    custom_collection = FakeCollection("argus_tool_index_custom", metadata={"embedding_lane": "custom"})
+    fast_collection = FakeCollection("argus_tool_index_fastembed", metadata={"embedding_lane": "fastembed"})
     custom_collection.add(
         ids=["builtin_one", "builtin_two"],
         embeddings=[[0.0] * 768, [0.0] * 768],
@@ -695,7 +695,7 @@ def test_tool_index_merges_fallback_tool_results_before_limit():
         name=LANE_CUSTOM,
         client=FakeEmbedder(768, "nomic", "http://embeddings/v1"),
         collection=custom_collection,
-        collection_name="odysseus_tool_index_custom",
+        collection_name="argus_tool_index_custom",
         model="nomic",
         url="http://embeddings/v1",
         dimension=768,
@@ -705,7 +705,7 @@ def test_tool_index_merges_fallback_tool_results_before_limit():
         name=LANE_FASTEMBED,
         client=FakeEmbedder(384, "mini", "local://fastembed"),
         collection=fast_collection,
-        collection_name="odysseus_tool_index_fastembed",
+        collection_name="argus_tool_index_fastembed",
         model="mini",
         url="local://fastembed",
         dimension=384,
@@ -722,7 +722,7 @@ def test_tool_index_merges_fallback_tool_results_before_limit():
 
 def test_legacy_collection_backfills_fastembed_lane(monkeypatch):
     fake = FakeChroma()
-    legacy = fake.get_or_create_collection("odysseus_memories", metadata={"hnsw:space": "cosine"})
+    legacy = fake.get_or_create_collection("argus_memories", metadata={"hnsw:space": "cosine"})
     legacy.add(
         ids=["legacy-memory"],
         embeddings=[[0.0] * 384],
@@ -741,13 +741,13 @@ def test_legacy_collection_backfills_fastembed_lane(monkeypatch):
     store = MemoryVectorStore("data")
 
     assert store.count() == 1
-    assert fake.collections["odysseus_memories"].count() == 1
-    assert fake.collections["odysseus_memories_fastembed"].count() == 1
+    assert fake.collections["argus_memories"].count() == 1
+    assert fake.collections["argus_memories_fastembed"].count() == 1
 
 
 def test_legacy_collection_backfills_custom_only_lane(monkeypatch):
     fake = FakeChroma()
-    legacy = fake.get_or_create_collection("odysseus_memories", metadata={"hnsw:space": "cosine"})
+    legacy = fake.get_or_create_collection("argus_memories", metadata={"hnsw:space": "cosine"})
     legacy.add(
         ids=["legacy-memory"],
         embeddings=[[0.0] * 384],
@@ -770,14 +770,14 @@ def test_legacy_collection_backfills_custom_only_lane(monkeypatch):
     store = MemoryVectorStore("data")
 
     assert store.count() == 1
-    assert "odysseus_memories_fastembed" not in fake.collections
-    assert fake.collections["odysseus_memories_custom"].count() == 1
-    assert len(fake.collections["odysseus_memories_custom"].rows["legacy-memory"]["embedding"]) == 768
+    assert "argus_memories_fastembed" not in fake.collections
+    assert fake.collections["argus_memories_custom"].count() == 1
+    assert len(fake.collections["argus_memories_custom"].rows["legacy-memory"]["embedding"]) == 768
 
 
 def test_legacy_migration_continues_when_custom_backfill_fails(monkeypatch):
     fake = FakeChroma()
-    legacy = fake.get_or_create_collection("odysseus_memories", metadata={"hnsw:space": "cosine"})
+    legacy = fake.get_or_create_collection("argus_memories", metadata={"hnsw:space": "cosine"})
     legacy.add(
         ids=["legacy-memory"],
         embeddings=[[0.0] * 384],
@@ -796,20 +796,20 @@ def test_legacy_migration_continues_when_custom_backfill_fails(monkeypatch):
     store = MemoryVectorStore("data")
 
     assert store.healthy
-    assert fake.collections["odysseus_memories_custom"].count() == 0
-    assert fake.collections["odysseus_memories_fastembed"].count() == 1
+    assert fake.collections["argus_memories_custom"].count() == 0
+    assert fake.collections["argus_memories_fastembed"].count() == 1
 
 
 def test_legacy_migration_resumes_partial_lane_backfill(monkeypatch):
     fake = FakeChroma()
-    legacy = fake.get_or_create_collection("odysseus_memories", metadata={"hnsw:space": "cosine"})
+    legacy = fake.get_or_create_collection("argus_memories", metadata={"hnsw:space": "cosine"})
     legacy.add(
         ids=["legacy-1", "legacy-2"],
         embeddings=[[0.0] * 384, [0.0] * 384],
         documents=["legacy memory one", "legacy memory two"],
         metadatas=[{"source": "memory"}, {"source": "memory"}],
     )
-    partial = fake.get_or_create_collection("odysseus_memories_fastembed", metadata={"embedding_lane": "fastembed"})
+    partial = fake.get_or_create_collection("argus_memories_fastembed", metadata={"embedding_lane": "fastembed"})
     partial.add(
         ids=["legacy-1"],
         embeddings=[[0.0] * 384],
@@ -828,19 +828,19 @@ def test_legacy_migration_resumes_partial_lane_backfill(monkeypatch):
     store = MemoryVectorStore("data")
 
     assert store.count() == 2
-    assert set(fake.collections["odysseus_memories_fastembed"].get()["ids"]) == {"legacy-1", "legacy-2"}
+    assert set(fake.collections["argus_memories_fastembed"].get()["ids"]) == {"legacy-1", "legacy-2"}
 
 
 def test_memory_rebuild_does_not_reimport_legacy_collection(monkeypatch):
     fake = FakeChroma()
-    legacy = fake.get_or_create_collection("odysseus_memories", metadata={"hnsw:space": "cosine"})
+    legacy = fake.get_or_create_collection("argus_memories", metadata={"hnsw:space": "cosine"})
     legacy.add(
         ids=["stale-memory"],
         embeddings=[[0.0] * 384],
         documents=["stale legacy memory"],
         metadatas=[{"source": "memory"}],
     )
-    inactive_custom = fake.get_or_create_collection("odysseus_memories_custom", metadata={"embedding_lane": "custom"})
+    inactive_custom = fake.get_or_create_collection("argus_memories_custom", metadata={"embedding_lane": "custom"})
     inactive_custom.add(
         ids=["stale-custom"],
         embeddings=[[0.0] * 768],
@@ -857,20 +857,20 @@ def test_memory_rebuild_does_not_reimport_legacy_collection(monkeypatch):
     from src.memory_vector import MemoryVectorStore
 
     store = MemoryVectorStore("data")
-    assert fake.collections["odysseus_memories_fastembed"].count() == 1
+    assert fake.collections["argus_memories_fastembed"].count() == 1
 
     store.rebuild([{"id": "current-memory", "text": "current rebuilt memory"}])
 
-    assert "odysseus_memories" not in fake.collections
-    assert "odysseus_memories_custom" not in fake.collections
-    assert fake.collections["odysseus_memories_fastembed"].count() == 1
-    assert fake.collections["odysseus_memories_fastembed"].get()["ids"] == ["current-memory"]
+    assert "argus_memories" not in fake.collections
+    assert "argus_memories_custom" not in fake.collections
+    assert fake.collections["argus_memories_fastembed"].count() == 1
+    assert fake.collections["argus_memories_fastembed"].get()["ids"] == ["current-memory"]
 
 
 def test_memory_remove_deletes_inactive_lane_collection(monkeypatch):
     fake = FakeChroma()
-    custom_collection = fake.get_or_create_collection("odysseus_memories_custom", metadata={"embedding_lane": "custom"})
-    fast_collection = fake.get_or_create_collection("odysseus_memories_fastembed", metadata={"embedding_lane": "fastembed"})
+    custom_collection = fake.get_or_create_collection("argus_memories_custom", metadata={"embedding_lane": "custom"})
+    fast_collection = fake.get_or_create_collection("argus_memories_fastembed", metadata={"embedding_lane": "fastembed"})
     custom_collection.add(
         ids=["mem-1"],
         embeddings=[[0.0] * 768],
@@ -889,7 +889,7 @@ def test_memory_remove_deletes_inactive_lane_collection(monkeypatch):
         name=LANE_FASTEMBED,
         client=FakeEmbedder(384, "mini", "local://fastembed"),
         collection=fast_collection,
-        collection_name="odysseus_memories_fastembed",
+        collection_name="argus_memories_fastembed",
         model="mini",
         url="local://fastembed",
         dimension=384,
@@ -922,21 +922,21 @@ def test_memory_rebuild_continues_when_custom_lane_fails(monkeypatch):
     store = MemoryVectorStore("data")
     store.rebuild([{"id": "current-memory", "text": "current rebuilt memory"}])
 
-    assert fake.collections["odysseus_memories_custom"].count() == 0
-    assert fake.collections["odysseus_memories_fastembed"].count() == 1
-    assert fake.collections["odysseus_memories_fastembed"].get()["ids"] == ["current-memory"]
+    assert fake.collections["argus_memories_custom"].count() == 0
+    assert fake.collections["argus_memories_fastembed"].count() == 1
+    assert fake.collections["argus_memories_fastembed"].get()["ids"] == ["current-memory"]
 
 
 def test_rag_rebuild_does_not_reimport_legacy_collection(monkeypatch, tmp_path):
     fake = FakeChroma()
-    legacy = fake.get_or_create_collection("odysseus_rag", metadata={"hnsw:space": "cosine"})
+    legacy = fake.get_or_create_collection("argus_rag", metadata={"hnsw:space": "cosine"})
     legacy.add(
         ids=["stale-doc"],
         embeddings=[[0.0] * 384],
         documents=["stale legacy document"],
         metadatas=[{"source": "/tmp/stale.md"}],
     )
-    inactive_custom = fake.get_or_create_collection("odysseus_rag_custom", metadata={"embedding_lane": "custom"})
+    inactive_custom = fake.get_or_create_collection("argus_rag_custom", metadata={"embedding_lane": "custom"})
     inactive_custom.add(
         ids=["stale-custom-doc"],
         embeddings=[[0.0] * 768],
@@ -953,21 +953,21 @@ def test_rag_rebuild_does_not_reimport_legacy_collection(monkeypatch, tmp_path):
     from src.rag_vector import VectorRAG
 
     rag = VectorRAG(persist_directory=str(tmp_path))
-    assert fake.collections["odysseus_rag_fastembed"].count() == 1
+    assert fake.collections["argus_rag_fastembed"].count() == 1
 
     assert rag.rebuild_index()
 
-    assert "odysseus_rag" not in fake.collections
-    assert "odysseus_rag_custom" not in fake.collections
-    assert fake.collections["odysseus_rag_fastembed"].count() == 0
+    assert "argus_rag" not in fake.collections
+    assert "argus_rag_custom" not in fake.collections
+    assert fake.collections["argus_rag_fastembed"].count() == 0
     assert rag.search("stale legacy", k=3) == []
 
 
 def test_rag_remove_directory_deletes_inactive_lane_collection(monkeypatch, tmp_path):
     fake = FakeChroma()
-    legacy_collection = fake.get_or_create_collection("odysseus_rag", metadata={"hnsw:space": "cosine"})
-    custom_collection = fake.get_or_create_collection("odysseus_rag_custom", metadata={"embedding_lane": "custom"})
-    fast_collection = fake.get_or_create_collection("odysseus_rag_fastembed", metadata={"embedding_lane": "fastembed"})
+    legacy_collection = fake.get_or_create_collection("argus_rag", metadata={"hnsw:space": "cosine"})
+    custom_collection = fake.get_or_create_collection("argus_rag_custom", metadata={"embedding_lane": "custom"})
+    fast_collection = fake.get_or_create_collection("argus_rag_fastembed", metadata={"embedding_lane": "fastembed"})
     source = str(tmp_path / "docs" / "note.md")
     directory = str(tmp_path / "docs")
     legacy_collection.add(
@@ -994,7 +994,7 @@ def test_rag_remove_directory_deletes_inactive_lane_collection(monkeypatch, tmp_
         name=LANE_FASTEMBED,
         client=FakeEmbedder(384, "mini", "local://fastembed"),
         collection=fast_collection,
-        collection_name="odysseus_rag_fastembed",
+        collection_name="argus_rag_fastembed",
         model="mini",
         url="local://fastembed",
         dimension=384,
@@ -1019,9 +1019,9 @@ def test_rag_remove_directory_deletes_inactive_lane_collection(monkeypatch, tmp_
 
 def test_rag_delete_by_source_deletes_inactive_lane_collection(monkeypatch, tmp_path):
     fake = FakeChroma()
-    legacy_collection = fake.get_or_create_collection("odysseus_rag", metadata={"hnsw:space": "cosine"})
-    custom_collection = fake.get_or_create_collection("odysseus_rag_custom", metadata={"embedding_lane": "custom"})
-    fast_collection = fake.get_or_create_collection("odysseus_rag_fastembed", metadata={"embedding_lane": "fastembed"})
+    legacy_collection = fake.get_or_create_collection("argus_rag", metadata={"hnsw:space": "cosine"})
+    custom_collection = fake.get_or_create_collection("argus_rag_custom", metadata={"embedding_lane": "custom"})
+    fast_collection = fake.get_or_create_collection("argus_rag_fastembed", metadata={"embedding_lane": "fastembed"})
     source = str(tmp_path / "docs" / "note.md")
     legacy_collection.add(
         ids=["legacy-doc"],
@@ -1047,7 +1047,7 @@ def test_rag_delete_by_source_deletes_inactive_lane_collection(monkeypatch, tmp_
         name=LANE_FASTEMBED,
         client=FakeEmbedder(384, "mini", "local://fastembed"),
         collection=fast_collection,
-        collection_name="odysseus_rag_fastembed",
+        collection_name="argus_rag_fastembed",
         model="mini",
         url="local://fastembed",
         dimension=384,
@@ -1068,7 +1068,7 @@ def test_rag_delete_by_source_deletes_inactive_lane_collection(monkeypatch, tmp_
 
 
 def test_vector_rag_uses_keyword_fallback_when_all_lanes_query_fail():
-    collection = FakeCollection("odysseus_rag_fastembed", metadata={"embedding_lane": "fastembed"})
+    collection = FakeCollection("argus_rag_fastembed", metadata={"embedding_lane": "fastembed"})
     collection.add(
         ids=["doc-1"],
         embeddings=[[0.0] * 384],
@@ -1084,7 +1084,7 @@ def test_vector_rag_uses_keyword_fallback_when_all_lanes_query_fail():
         name=LANE_FASTEMBED,
         client=FakeEmbedder(384, "mini", "local://fastembed"),
         collection=collection,
-        collection_name="odysseus_rag_fastembed",
+        collection_name="argus_rag_fastembed",
         model="mini",
         url="local://fastembed",
         dimension=384,

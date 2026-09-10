@@ -1,4 +1,4 @@
-from types import SimpleNamespace
+﻿from types import SimpleNamespace
 
 from tests.helpers.cli_loader import load_script
 from tests.helpers.db_stubs import make_core_db_stub
@@ -10,7 +10,7 @@ def _load_sessions_cli(monkeypatch):
         attributes={"SessionLocal": object, "Session": object},
         install_core_package=True,
     )
-    return load_script("odysseus-sessions")
+    return load_script("argus-sessions")
 
 
 def test_serialize_normalizes_numeric_counters(monkeypatch):

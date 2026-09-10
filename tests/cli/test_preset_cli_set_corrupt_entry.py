@@ -1,10 +1,10 @@
-from types import SimpleNamespace
+﻿from types import SimpleNamespace
 
 from tests.helpers.cli_loader import load_script
 
 
 def _load_preset_cli():
-    return load_script("odysseus-preset")
+    return load_script("argus-preset")
 
 
 def test_set_replaces_corrupt_existing_entry(monkeypatch):

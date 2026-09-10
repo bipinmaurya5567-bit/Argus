@@ -1,4 +1,4 @@
-import sys
+﻿import sys
 from types import ModuleType
 
 from tests.helpers.cli_loader import load_script
@@ -26,7 +26,7 @@ def _load_mail_cli(monkeypatch):
         install_core_package=True,
     )
 
-    return load_script("odysseus-mail")
+    return load_script("argus-mail")
 
 
 def test_recipient_list_trims_to_cc_and_bcc(monkeypatch):

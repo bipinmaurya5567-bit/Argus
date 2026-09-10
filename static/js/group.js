@@ -1,4 +1,4 @@
-// static/js/group.js
+﻿// static/js/group.js
 // Group Chat — multi-model conversations (parallel or round-robin)
 
 import uiModule from './ui.js';
@@ -19,7 +19,7 @@ let _abortControllers = [];
 let _mode = 'round-robin';    // 'parallel' or 'round-robin'
 let _roundRobinIdx = 0;
 let _parentSessionId = null;
-const GROUP_STATE_KEY = 'odysseus-group-state';
+const GROUP_STATE_KEY = 'argus-group-state';
 
 export function init(apiBase) {
   API_BASE = apiBase;
@@ -550,9 +550,9 @@ export async function startGroup(models, parentSessionId) {
     _parentSessionId = pdata.id;
     // Register as group session for sidebar icon
     try {
-      const storedGroupSessions = Storage.getJSON('odysseus-group-sessions', []);
+      const storedGroupSessions = Storage.getJSON('argus-group-sessions', []);
       const gids = Array.isArray(storedGroupSessions) ? storedGroupSessions : [];
-      if (!gids.includes(_parentSessionId)) { gids.push(_parentSessionId); localStorage.setItem('odysseus-group-sessions', JSON.stringify(gids)); }
+      if (!gids.includes(_parentSessionId)) { gids.push(_parentSessionId); localStorage.setItem('argus-group-sessions', JSON.stringify(gids)); }
     } catch (e) {}
   } catch (e) {
     console.error('[group] Failed to create parent session:', e);
@@ -827,7 +827,7 @@ async function _streamToHolder(modelIdx, sessionId, msg, holderEl, abortCtrl) {
             );
             uiModule.scrollHistory();
           }
-          // Text delta (Odysseus format)
+          // Text delta (Argus format)
           else if (json.delta !== undefined) {
             if (_firstToken) { _firstToken = false; if (holderEl._spinner) { holderEl._spinner.destroy(); delete holderEl._spinner; } bodyEl.innerHTML = ''; }
             // Handle thinking tags from vLLM

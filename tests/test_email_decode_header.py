@@ -1,4 +1,4 @@
-"""Regression tests for routes.email_helpers._decode_header.
+﻿"""Regression tests for routes.email_helpers._decode_header.
 
 A single email whose Subject/From/To/Cc header declares an unknown or invalid
 MIME charset (e.g. `=?x-unknown-charset?B?...?=`, common in spam/malformed mail)
@@ -14,7 +14,7 @@ import os
 import tempfile
 from pathlib import Path
 
-_tmp_data = Path(tempfile.mkdtemp(prefix="odysseus_decode_hdr_"))
+_tmp_data = Path(tempfile.mkdtemp(prefix="argus_decode_hdr_"))
 os.environ.setdefault("DATA_DIR", str(_tmp_data))
 os.environ.setdefault("DATABASE_URL", f"sqlite:///{_tmp_data / 'app.db'}")
 

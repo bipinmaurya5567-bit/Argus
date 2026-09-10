@@ -1,4 +1,4 @@
-"""Issue #3222 — native function-calling models (GPT/Claude/Grok/Qwen3/DeepSeek-V,
+﻿"""Issue #3222 — native function-calling models (GPT/Claude/Grok/Qwen3/DeepSeek-V,
 etc.) must not have ordinary illustrative Markdown fences in their prose
 (```bash, ```python, ```json examples written for the user to read) executed
 as real tool calls just because the textual fallback parser matches them.
@@ -249,13 +249,13 @@ def test_resolve_tool_blocks_recovers_invoke_markup_for_native_model_with_no_nat
     fenced-example gating."""
     leaked = (
         "I'll search for that now.\n"
-        '<invoke name="web_search"><parameter name="query">odysseus changelog</parameter></invoke>'
+        '<invoke name="web_search"><parameter name="query">argus changelog</parameter></invoke>'
     )
     blocks, used_native = al._resolve_tool_blocks(leaked, [], round_num=1, is_api_model=True)
     assert used_native is False
     assert len(blocks) == 1
     assert blocks[0].tool_type == "web_search"
-    assert "odysseus changelog" in blocks[0].content
+    assert "argus changelog" in blocks[0].content
 
 
 # ---------------------------------------------------------------------------

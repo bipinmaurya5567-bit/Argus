@@ -1,4 +1,4 @@
-"""fetch_webpage_content must return plain-text and Markdown bodies verbatim.
+﻿"""fetch_webpage_content must return plain-text and Markdown bodies verbatim.
 
 raw.githubusercontent.com serves Markdown as `text/plain`, and a lot of code
 and tool documentation lives in `.md` / `.txt`. Those have no HTML structure,
@@ -71,7 +71,7 @@ def test_octet_stream_with_txt_suffix_returns_body(monkeypatch, no_cache):
 def test_application_json_returns_body(monkeypatch, no_cache):
     # application/json is not text/*; it must still be returned verbatim
     # instead of being fed to the HTML parser (which yields empty content).
-    body = '{"name": "odysseus", "items": [1, 2, 3]}'
+    body = '{"name": "argus", "items": [1, 2, 3]}'
     _patch_fetch(monkeypatch, body, "application/json")
     r = content_mod.fetch_webpage_content("https://api.example.com/data")
     assert r["success"] is True

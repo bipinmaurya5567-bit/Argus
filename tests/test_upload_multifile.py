@@ -1,4 +1,4 @@
-"""Regression tests for issue #1346 — attaching more than one file at once made
+﻿"""Regression tests for issue #1346 — attaching more than one file at once made
 the model "not even see" the attachments.
 
 Root cause: the per-IP concurrency guard in routes/upload_routes.py summed its
@@ -142,7 +142,7 @@ def test_rate_limit_accommodates_a_full_batch():
     # The per-minute file cap must comfortably exceed the frontend batch cap,
     # or a single legitimate multi-file attach trips it (issue #1346).
     h = UploadHandler.__new__(UploadHandler)
-    UploadHandler.__init__(h, base_dir="/tmp", upload_dir="/tmp/_odysseus_test_uploads_cfg")
+    UploadHandler.__init__(h, base_dir="/tmp", upload_dir="/tmp/_argus_test_uploads_cfg")
     assert h.upload_rate_limit >= _max_files_from_frontend()
 
 

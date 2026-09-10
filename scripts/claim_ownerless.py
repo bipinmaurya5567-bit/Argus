@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 """Claim all ownerless data for a specific user.
 
 Run once after enabling multi-user auth to assign existing data to the admin.
@@ -93,7 +93,7 @@ def main():
         db.close()
 
     print(f"\nDone! All ownerless data now belongs to {owner}")
-    print("Restart the server: sudo systemctl restart odysseus-ui")
+    print("Restart the server: sudo systemctl restart argus-ui")
 
 
 if __name__ == "__main__":

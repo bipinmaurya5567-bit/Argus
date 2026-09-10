@@ -1,4 +1,4 @@
-import sys
+﻿import sys
 import types
 from unittest.mock import MagicMock
 
@@ -9,7 +9,7 @@ def _load_cli(monkeypatch):
     svc = types.ModuleType("services.memory.skills")
     svc.SkillsManager = MagicMock()
     monkeypatch.setitem(sys.modules, "services.memory.skills", svc)
-    return load_script("odysseus-skills")
+    return load_script("argus-skills")
 
 
 def test_skill_entries_skips_invalid_rows(monkeypatch):

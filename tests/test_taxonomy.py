@@ -1,4 +1,4 @@
-"""Unit tests for tests/_taxonomy.py - the test-taxonomy classification module.
+﻿"""Unit tests for tests/_taxonomy.py - the test-taxonomy classification module.
 
 These tests pin the conservative classification behavior directly, without
 running pytest collection. They import only the module under test (a test-support
@@ -140,6 +140,6 @@ def test_security_beats_services_when_both_tokens_present():
 
 
 def test_unrelated_helpers_ancestor_is_not_helpers():
-    result = classify_test_path("/work/helpers/odysseus/tests/test_owner_scope.py")
+    result = classify_test_path("/work/helpers/argus/tests/test_owner_scope.py")
     assert result.area == "security"
     assert result.sub_area == "owner_scope"

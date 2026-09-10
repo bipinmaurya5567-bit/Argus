@@ -1,4 +1,4 @@
-"""Calendar routes — local SQLite-backed calendar CRUD."""
+﻿"""Calendar routes — local SQLite-backed calendar CRUD."""
 
 import logging
 import re
@@ -37,12 +37,12 @@ def _ics_naive_dtstart(dt):
 # Single-user fallback identity. Used only when:
 #   1. The app is configured for single-user (no auth middleware), AND
 #   2. The request didn't resolve to an authenticated user.
-# Override at deploy time via `ODYSSEUS_FALLBACK_OWNER` env var. In a real
-# multi-user install set `ODYSSEUS_SINGLE_USER=0` so unauthenticated requests
+# Override at deploy time via `ARGUS_FALLBACK_OWNER` env var. In a real
+# multi-user install set `ARGUS_SINGLE_USER=0` so unauthenticated requests
 # are rejected instead of silently writing to this address.
 import os as _os
-FALLBACK_OWNER = _os.environ.get("ODYSSEUS_FALLBACK_OWNER", "owner@localhost")
-_SINGLE_USER_MODE = _os.environ.get("ODYSSEUS_SINGLE_USER", "1") != "0"
+FALLBACK_OWNER = _os.environ.get("ARGUS_FALLBACK_OWNER", "owner@localhost")
+_SINGLE_USER_MODE = _os.environ.get("ARGUS_SINGLE_USER", "1") != "0"
 
 
 def _require_user(request: Request) -> str:
@@ -1344,7 +1344,7 @@ def setup_calendar_routes() -> APIRouter:
             lines = [
                 "BEGIN:VCALENDAR",
                 "VERSION:2.0",
-                "PRODID:-//Odysseus//Calendar//EN",
+                "PRODID:-//Argus//Calendar//EN",
                 f"X-WR-CALNAME:{_ics_escape(cal.name)}",
             ]
             for ev in events:

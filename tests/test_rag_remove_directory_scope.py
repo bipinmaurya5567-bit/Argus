@@ -1,9 +1,9 @@
-"""Regression guard for #1660 — removing one RAG directory must delete only that
+﻿"""Regression guard for #1660 — removing one RAG directory must delete only that
 directory's chunks, never wipe the whole shared collection.
 
 Two compounding defects were fixed:
   1. PersonalDocsManager.remove_directory called rag_manager.rebuild_index(),
-     which delete+recreates the entire shared "odysseus_rag" collection (all
+     which delete+recreates the entire shared "argus_rag" collection (all
      owners + the base index), then re-indexed only the remaining tracked dirs
      (ownerless, never personal_dir). Now it does a targeted per-directory delete.
   2. VectorRAG.remove_directory selected via where={"source": {"$contains": dir}},

@@ -1,4 +1,4 @@
-#!/bin/sh
+﻿#!/bin/sh
 # Entrypoint that fixes the #1 self-host footgun: a Docker container
 # that runs as root writes root-owned files into bind-mounted host
 # volumes, and the host user (or a non-root service user) then can't
@@ -18,12 +18,12 @@ PYTHON_BIN="$(command -v python)"
 
 # Reuse an existing matching group/user if the host's UID/GID already
 # corresponds to one in /etc/passwd (e.g. when the image is rebuilt
-# and "odysseus" already exists at the same id). Otherwise create.
+# and "argus" already exists at the same id). Otherwise create.
 if ! getent group "$PGID" >/dev/null 2>&1; then
-    groupadd -g "$PGID" odysseus
+    groupadd -g "$PGID" argus
 fi
 if ! getent passwd "$PUID" >/dev/null 2>&1; then
-    useradd -u "$PUID" -g "$PGID" -M -s /bin/sh -d /app odysseus
+    useradd -u "$PUID" -g "$PGID" -M -s /bin/sh -d /app argus
 fi
 
 mount_root_for() {

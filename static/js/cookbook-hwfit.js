@@ -1,4 +1,4 @@
-// ============================================
+﻿// ============================================
 // COOKBOOK HWFIT SUB-MODULE
 // "What Fits?" hardware model fitting UI
 // ============================================
@@ -866,7 +866,7 @@ function _renderHwVisibilityWarning(sys) {
   box.querySelector('[data-hw-action="copy"]')?.addEventListener('click', () => {
     // Keep diagnostics copy/paste friendly for GitHub issues and Docker support.
     const text = [
-      'Odysseus Cookbook hardware diagnostics',
+      'Argus Cookbook hardware diagnostics',
       `probe_scope=${sys?.probe_scope || ''}`,
       `containerized=${sys?.containerized === true}`,
       `backend=${sys?.backend || ''}`,
@@ -879,9 +879,9 @@ function _renderHwVisibilityWarning(sys) {
       `cpu_name=${sys?.cpu_name || ''}`,
       '',
       'Useful checks:',
-      'docker compose exec odysseus nvidia-smi -L',
-      'docker compose exec odysseus cat /proc/meminfo | head',
-      'docker compose exec odysseus python -c "from services.hwfit.hardware import detect_system; import json; print(json.dumps(detect_system(fresh=True), indent=2))"',
+      'docker compose exec argus nvidia-smi -L',
+      'docker compose exec argus cat /proc/meminfo | head',
+      'docker compose exec argus python -c "from services.hwfit.hardware import detect_system; import json; print(json.dumps(detect_system(fresh=True), indent=2))"',
     ].join('\n');
 
     _copyText(text);
@@ -1934,7 +1934,7 @@ export function _hwfitInit() {
     // empty (see above), which made the rebuilt list temporarily miss the
     // selected server. The old code then "fell back" to the first remote server
     // and persisted it, silently flipping the active host even though the
-    // dropdown still showed odysseus. The user's selection must only change via
+    // dropdown still showed argus. The user's selection must only change via
     // an explicit dropdown pick. Here we just refresh env/path if we can match
     // the current host; otherwise leave remoteHost untouched.
     const sel = _serverByVal(_envState.remoteServerKey || _envState.remoteHost);

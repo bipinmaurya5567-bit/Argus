@@ -1,4 +1,4 @@
-"""Provider / endpoint resolution tests against the REAL resolver.
+﻿"""Provider / endpoint resolution tests against the REAL resolver.
 
 `test_endpoint_resolver.py` deliberately *copies* the pure functions to avoid
 import side effects. The downside is that those copies silently drift from the
@@ -133,7 +133,7 @@ def test_headers_openrouter_adds_attribution():
     assert h["Authorization"] == "Bearer secret"
     # OpenRouter ranks/labels apps via these headers.
     assert h["HTTP-Referer"].startswith("https://github.com/")
-    assert h["X-OpenRouter-Title"] == "Odysseus"
+    assert h["X-OpenRouter-Title"] == "Argus"
 
 
 def test_headers_omit_authorization_when_no_key():

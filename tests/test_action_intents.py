@@ -1,4 +1,4 @@
-from src.action_intents import classify_tool_intent, message_needs_tools
+﻿from src.action_intents import classify_tool_intent, message_needs_tools
 
 
 def test_calendar_entry_request_promotes_to_agent():
@@ -58,7 +58,7 @@ def test_explicit_web_search_promotes_to_agent():
 
 def test_explanatory_calendar_questions_stay_plain_chat():
     assert not message_needs_tools("How do I add an entry to my calendar?")
-    assert not message_needs_tools("What about the built-in Odysseus calendar, is that linked to email?")
+    assert not message_needs_tools("What about the built-in Argus calendar, is that linked to email?")
     assert not message_needs_tools("Can you explain how calendar reminders work?")
     intent = classify_tool_intent("How do I add an entry to my calendar?")
     assert not intent.needs_tools

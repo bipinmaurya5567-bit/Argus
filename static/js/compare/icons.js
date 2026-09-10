@@ -1,4 +1,4 @@
-// compare/icons.js — SVG icons, prompt templates, and constants
+﻿// compare/icons.js — SVG icons, prompt templates, and constants
 
 // ── SVG Icons ──
 
@@ -25,9 +25,9 @@ export const WAVE_FRAMES = ['▁▂▃', '▂▃▄', '▃▄▅', '▄▅▆', 
 
 // ── Storage keys & limits ──
 
-export const VOTES_STORAGE_KEY = 'odysseus-compare-votes';
+export const VOTES_STORAGE_KEY = 'argus-compare-votes';
 export const VOTES_MAX = 200;
-export const POOL_STORAGE_KEY = 'odysseus-shuffle-pool-excluded';
+export const POOL_STORAGE_KEY = 'argus-shuffle-pool-excluded';
 
 // ── Evaluation prompt templates ──
 //

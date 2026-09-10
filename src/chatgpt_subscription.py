@@ -1,4 +1,4 @@
-"""ChatGPT subscription / Codex backend OAuth helpers.
+﻿"""ChatGPT subscription / Codex backend OAuth helpers.
 
 This provider is intentionally separate from OpenAI API-key endpoints. It uses
 OpenAI account OAuth device authorization, stores refresh tokens server-side,
@@ -80,7 +80,7 @@ def chatgpt_headers(access_token: Optional[str]) -> Dict[str, str]:
         "Accept": "application/json, text/event-stream",
         "Origin": "https://chatgpt.com",
         "Referer": "https://chatgpt.com/codex",
-        "User-Agent": "Odysseus ChatGPT Subscription",
+        "User-Agent": "Argus ChatGPT Subscription",
     }
     if access_token:
         headers["Authorization"] = f"Bearer {access_token}"

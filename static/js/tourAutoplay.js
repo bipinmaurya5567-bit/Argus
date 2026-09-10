@@ -1,4 +1,4 @@
-// tourAutoplay.js — auto-fires the matching `/tour-<x>` slash command the
+﻿// tourAutoplay.js — auto-fires the matching `/tour-<x>` slash command the
 // first time the user opens a tool modal. One-shot per modal: dismissed or
 // not, the marker is set so reopens never auto-trigger again.
 //
@@ -22,7 +22,7 @@ const TOUR_FOR_MODAL = {
   'gallery-modal':          'tour-gallery',
 };
 
-const SEEN_KEY = (tour) => `odysseus-tour-autoplay-seen-${tour}`;
+const SEEN_KEY = (tour) => `argus-tour-autoplay-seen-${tour}`;
 
 let _initialized = false;
 // Suppress re-fire if a tour is already active or another modal opens while

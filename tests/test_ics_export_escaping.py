@@ -1,4 +1,4 @@
-"""Tests for ICS export correctness — calendar name escaping and UTC flag."""
+﻿"""Tests for ICS export correctness — calendar name escaping and UTC flag."""
 import types
 from datetime import datetime
 from unittest.mock import MagicMock, patch
@@ -29,7 +29,7 @@ def _export(cal_name, events):
     lines = [
         "BEGIN:VCALENDAR",
         "VERSION:2.0",
-        "PRODID:-//Odysseus//Calendar//EN",
+        "PRODID:-//Argus//Calendar//EN",
         f"X-WR-CALNAME:{_ics_escape(cal_name)}",
     ]
     for ev in events:

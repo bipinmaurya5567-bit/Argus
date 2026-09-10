@@ -1,4 +1,4 @@
-import asyncio
+﻿import asyncio
 from src import mcp_oauth
 
 
@@ -36,10 +36,10 @@ def test_register_pending_prunes_abandoned_flows():
     assert old.cancelled()
 
 
-def test_build_provider_has_odysseus_client_metadata():
+def test_build_provider_has_argus_client_metadata():
     p = mcp_oauth.build_provider("srv-1", "https://example.com/mcp")
     md = p.context.client_metadata
-    assert md.client_name == "Odysseus"
+    assert md.client_name == "Argus"
     assert "authorization_code" in md.grant_types
     assert "refresh_token" in md.grant_types
     assert str(md.redirect_uris[0]).rstrip("/") == mcp_oauth.REDIRECT_URI.rstrip("/")

@@ -1,4 +1,4 @@
-"""routes.email_helpers._decode_header must not inject spaces between parts.
+﻿"""routes.email_helpers._decode_header must not inject spaces between parts.
 
 email.header.decode_header returns plain-text runs WITH their surrounding
 whitespace (e.g. (b"Re: ", None)), so joining the parts with " " produced a
@@ -15,7 +15,7 @@ import os
 import tempfile
 from pathlib import Path
 
-_tmp_data = Path(tempfile.mkdtemp(prefix="odysseus_decode_hdr_spaces_"))
+_tmp_data = Path(tempfile.mkdtemp(prefix="argus_decode_hdr_spaces_"))
 os.environ.setdefault("DATA_DIR", str(_tmp_data))
 os.environ.setdefault("DATABASE_URL", f"sqlite:///{_tmp_data / 'app.db'}")
 

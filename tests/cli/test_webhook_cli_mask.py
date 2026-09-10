@@ -1,10 +1,10 @@
-from tests.helpers.cli_loader import load_script
+﻿from tests.helpers.cli_loader import load_script
 from tests.helpers.db_stubs import make_core_db_stub
 
 
 def test_mask_token_handles_short_values(monkeypatch):
     make_core_db_stub(monkeypatch, models=["ScheduledTask"])
-    cli = load_script("odysseus-webhook")
+    cli = load_script("argus-webhook")
 
     assert cli._mask_token("") == ""
     assert cli._mask_token("short") == "***"

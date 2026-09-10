@@ -1,4 +1,4 @@
-import asyncio
+﻿import asyncio
 
 import mcp_servers.memory_server as memory_server
 from src.memory import MemoryManager
@@ -55,7 +55,7 @@ def test_mcp_memory_uses_configured_owner_for_all_operations(monkeypatch, tmp_pa
     )
     manager.save([alice, bob])
     _configure_server(monkeypatch, manager, vector)
-    monkeypatch.setenv("ODYSSEUS_MCP_MEMORY_OWNER", "alice")
+    monkeypatch.setenv("ARGUS_MCP_MEMORY_OWNER", "alice")
 
     list_text = _tool_text({"action": "list"})
     assert "Alice likes green tea" in list_text

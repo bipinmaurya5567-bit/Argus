@@ -1,10 +1,10 @@
-// tourHints.js — secret continuation of /tour. The first time the user opens
+﻿// tourHints.js — secret continuation of /tour. The first time the user opens
 // a tool modal (after the welcome experience), surface a single "pro tip"
 // hint pointing out that modals can be snapped to the screen edge or
 // fullscreened by dragging the title bar. Shown once globally — once the
 // user has dismissed it (or it auto-hides), it never returns.
 
-const HINT_SEEN_KEY = 'odysseus-hint-drag-to-snap-seen';
+const HINT_SEEN_KEY = 'argus-hint-drag-to-snap-seen';
 
 // Allow-list of modals where the snap/fullscreen hint makes sense.
 // These are the full-window "tool" modals where users commonly want to

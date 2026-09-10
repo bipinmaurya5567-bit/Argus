@@ -1,18 +1,18 @@
-# Odysseus Setup Guide
+﻿# Argus Setup Guide
 
 This page keeps the detailed install, deployment, troubleshooting, and configuration notes out of the front README.
 
 ## Quick Start
 
-> **Branch note:** `dev` is the default branch and contains the latest development changes, but it may be unstable. For the more stable curated branch, use [`main`](https://github.com/pewdiepie-archdaemon/odysseus/tree/main).
+> **Branch note:** `dev` is the default branch and contains the latest development changes, but it may be unstable. For the more stable curated branch, use [`main`](https://github.com/pewdiepie-archdaemon/argus/tree/main).
 
 Defaults work out of the box: clone, run, then configure models/search/email
 inside **Settings**. Only edit `.env` for deployment-level overrides like
 `APP_BIND`, `APP_PORT`, `AUTH_ENABLED`, `DATABASE_URL`, or a pre-seeded admin password.
 
-On first setup, Odysseus creates an admin account (`admin` unless
-`ODYSSEUS_ADMIN_USER` is set) and prints a temporary password in the terminal.
-For Docker installs, the same line is in `docker compose logs odysseus`.
+On first setup, Argus creates an admin account (`admin` unless
+`ARGUS_ADMIN_USER` is set) and prints a temporary password in the terminal.
+For Docker installs, the same line is in `docker compose logs argus`.
 Use that for the first login, then change it in **Settings**.
 
 Contributing? See [CONTRIBUTING.md](CONTRIBUTING.md) for setup, testing, and
@@ -20,8 +20,8 @@ pull request guidelines.
 
 ### Docker (recommended)
 ```bash
-git clone https://github.com/pewdiepie-archdaemon/odysseus.git
-cd odysseus
+git clone https://github.com/pewdiepie-archdaemon/argus.git
+cd argus
 cp .env.example .env       # optional, but recommended for explicit defaults
 docker compose up -d --build
 ```
@@ -38,8 +38,8 @@ only when you intentionally want LAN/reverse-proxy access.
 
 ### Native Linux / macOS
 ```bash
-git clone https://github.com/pewdiepie-archdaemon/odysseus.git
-cd odysseus
+git clone https://github.com/pewdiepie-archdaemon/argus.git
+cd argus
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
@@ -53,18 +53,18 @@ connect to API or remote model servers instead. Use `--host 0.0.0.0` only when y
 
 ### Apple Silicon
 Docker on macOS cannot use the Metal GPU. For GPU-accelerated Cookbook on an
-M-series Mac, run Odysseus natively:
+M-series Mac, run Argus natively:
 
 ```bash
-git clone https://github.com/pewdiepie-archdaemon/odysseus.git
-cd odysseus
+git clone https://github.com/pewdiepie-archdaemon/argus.git
+cd argus
 ./start-macos.sh
 ```
 
 It launches at `http://127.0.0.1:7860`. To expose it to your phone over a trusted LAN/VPN such as Tailscale, bind all interfaces:
 
 ```bash
-ODYSSEUS_HOST=0.0.0.0 ./start-macos.sh
+ARGUS_HOST=0.0.0.0 ./start-macos.sh
 # then open http://<tailscale-ip>:7860
 ```
 
@@ -81,8 +81,8 @@ expose this port directly to the public internet. To build a clickable app wrapp
 <details>
 <summary>Cookbook, GPU, Ollama, and troubleshooting notes</summary>
 
-**Docker bundled services.** Compose starts Odysseus, ChromaDB, SearXNG, and
-ntfy. Odysseus and the bundled service ports bind to `127.0.0.1` by default, so
+**Docker bundled services.** Compose starts Argus, ChromaDB, SearXNG, and
+ntfy. Argus and the bundled service ports bind to `127.0.0.1` by default, so
 they are reachable from the host but not exposed to your LAN/public internet
 unless you opt in.
 
@@ -92,7 +92,7 @@ serve engines live in `./data/local` (`~/.local` in the container), so they
 survive container recreation.
 
 **Remote servers.** In **Cookbook -> Settings -> Servers**, generate the
-Odysseus SSH key and add the public key to the remote server's
+Argus SSH key and add the public key to the remote server's
 `~/.ssh/authorized_keys`. From the host you can also run:
 
 ```bash
@@ -172,8 +172,8 @@ source of truth; the standalone files mirror them for single-file deployments.
 Verify after enabling either overlay:
 
 ```bash
-docker compose exec odysseus nvidia-smi -L   # NVIDIA
-docker compose exec odysseus sh -lc 'test -e /dev/kfd && test -d /dev/dri && ls -l /dev/kfd /dev/dri/renderD*'  # AMD
+docker compose exec argus nvidia-smi -L   # NVIDIA
+docker compose exec argus sh -lc 'test -e /dev/kfd && test -d /dev/dri && ls -l /dev/kfd /dev/dri/renderD*'  # AMD
 ```
 
 > **GPU passthrough ≠ llama.cpp CUDA.** `nvidia-smi` passing inside the
@@ -187,7 +187,7 @@ docker compose exec odysseus sh -lc 'test -e /dev/kfd && test -d /dev/dri && ls 
 > The same split applies to AMD/ROCm: seeing `/dev/kfd` and `/dev/dri` inside
 > the container confirms device passthrough, not ROCm userspace or a
 > ROCm-enabled vLLM/llama.cpp build. `rocm-smi` and `rocminfo` are not expected
-> inside the slim Odysseus image.
+> inside the slim Argus image.
 
 **Ollama with Docker.** If Ollama runs on the host, add this endpoint in
 Settings:
@@ -202,25 +202,25 @@ Ollama must listen outside its own loopback interface:
 OLLAMA_HOST=0.0.0.0:11434 ollama serve
 ```
 
-This connects Odysseus in Docker to an Ollama server that is already running on
+This connects Argus in Docker to an Ollama server that is already running on
 your host machine; it does not start Ollama inside the container.
 `host.docker.internal` is Docker's hostname for the host machine from inside the
 container. Cookbook **Serve** is a separate workflow for serving downloaded
-models through Odysseus/llama.cpp, so Windows users with an existing Ollama
+models through Argus/llama.cpp, so Windows users with an existing Ollama
 install usually only need to add the endpoint in Settings.
 
 **Useful checks.**
 
 ```bash
 docker compose ps
-docker compose logs --tail=120 odysseus
-docker compose logs odysseus | grep -E 'ChromaDB|MemoryVectorStore|DEGRADED'
+docker compose logs --tail=120 argus
+docker compose logs argus | grep -E 'ChromaDB|MemoryVectorStore|DEGRADED'
 ```
 
 **macOS details.** `start-macos.sh` installs Homebrew deps, creates the venv,
 runs setup, and starts uvicorn on port `7860` because AirPlay often holds
 `7000`. It uses llama.cpp/Ollama for Metal. vLLM/SGLang are CUDA/ROCm-only and
-do not run on macOS. MLX-only models are not served by Odysseus.
+do not run on macOS. MLX-only models are not served by Argus.
 
 </details>
 
@@ -230,16 +230,16 @@ do not run on macOS. MLX-only models are not served by Odysseus.
 server; safe to re-run):
 
 ```powershell
-git clone https://github.com/pewdiepie-archdaemon/odysseus.git
-cd odysseus
+git clone https://github.com/pewdiepie-archdaemon/argus.git
+cd argus
 powershell -ExecutionPolicy Bypass -File .\launch-windows.ps1
 ```
 
 Or do it by hand:
 
 ```powershell
-git clone https://github.com/pewdiepie-archdaemon/odysseus.git
-cd odysseus
+git clone https://github.com/pewdiepie-archdaemon/argus.git
+cd argus
 py -3.11 -m venv venv
 venv\Scripts\Activate.ps1
 pip install -r requirements.txt
@@ -255,7 +255,7 @@ email, calendar, deep research) runs fully native. For full **Cookbook** backgro
 model downloads and the agent shell tool, also install
 [Git for Windows](https://git-scm.com/download/win) (provides `bash.exe`).
 Local GPU *serving* of vLLM/SGLang needs Linux/WSL2; for a local model on Windows,
-[Ollama](https://ollama.com/download) is the easiest path — point Odysseus at
+[Ollama](https://ollama.com/download) is the easiest path — point Argus at
 `http://localhost:11434/v1` in Settings.
 
 Open `http://localhost:7000`, log in with the generated admin password,
@@ -264,7 +264,7 @@ and configure everything else inside **Settings**.
 ## Troubleshooting & Advanced Setup
 
 ### `chromadb-client` conflicts with embedded ChromaDB
-If `chromadb-client` (the lightweight HTTP-only package) is installed alongside the full `chromadb` package, Odysseus starts but ChromaDB silently falls back to HTTP-only mode and fails.
+If `chromadb-client` (the lightweight HTTP-only package) is installed alongside the full `chromadb` package, Argus starts but ChromaDB silently falls back to HTTP-only mode and fails.
 
 **Fix:** uninstall `chromadb-client` and force-reinstall the full package:
 ```bash
@@ -273,8 +273,8 @@ If `chromadb-client` (the lightweight HTTP-only package) is installed alongside 
 ```
 
 ### HTTPS + LAN/Tailscale exposure
-To expose Odysseus on a local network or Tailscale with HTTPS:
-1. Change the bind address to `0.0.0.0` in `.env` (`APP_BIND=0.0.0.0` or `ODYSSEUS_HOST=0.0.0.0`).
+To expose Argus on a local network or Tailscale with HTTPS:
+1. Change the bind address to `0.0.0.0` in `.env` (`APP_BIND=0.0.0.0` or `ARGUS_HOST=0.0.0.0`).
 2. Generate a locally-trusted cert for your LAN/Tailscale IPs using [mkcert](https://github.com/FiloSottile/mkcert):
    ```bash
    mkcert -install
@@ -284,7 +284,7 @@ To expose Odysseus on a local network or Tailscale with HTTPS:
    ```bash
    python -m uvicorn app:app --host 0.0.0.0 --port 7000 --ssl-certfile=cert.pem --ssl-keyfile=key.pem
    ```
-4. Install the `mkcert` CA on any other device you want to access Odysseus from (e.g., for iOS, email the `rootCA.pem` to yourself, install the profile, and trust it in Certificate Trust Settings).
+4. Install the `mkcert` CA on any other device you want to access Argus from (e.g., for iOS, email the `rootCA.pem` to yourself, install the profile, and trust it in Certificate Trust Settings).
 
 ### Optional Dependencies
 `requirements-optional.txt` contains packages that unlock extra features. It is not installed by default.
@@ -316,17 +316,17 @@ uv pip sync requirements.lock                          # reproduce it exactly la
 `requirements.lock` is gitignored and platform-specific (compile it on the OS you deploy to). Regenerate it deliberately when you want to take upgrades. The plain `uv pip install -r requirements.txt` keeps following the unpinned requirements like pip does.
 
 ### Outlook / Office 365 email
-Odysseus email accounts currently use IMAP/SMTP username-password auth. Outlook
+Argus email accounts currently use IMAP/SMTP username-password auth. Outlook
 and Microsoft 365 generally require OAuth instead, so normal Microsoft mailbox
 passwords will fail. See [docs/email-outlook.md](docs/email-outlook.md) for the
 current limitation and the planned integration direction.
 
 ## Security Notes
-Odysseus is a self-hosted workspace with powerful local tools: shell access, file uploads, model downloads, web research, email/calendar integrations, and API tokens. Treat it like an admin console.
+Argus is a self-hosted workspace with powerful local tools: shell access, file uploads, model downloads, web research, email/calendar integrations, and API tokens. Treat it like an admin console.
 
 - Keep `AUTH_ENABLED=true` for any network-accessible deployment.
 - Keep `LOCALHOST_BYPASS=false` outside local development.
-- Use `SECURE_COOKIES=true` when Odysseus is served through HTTPS by a trusted reverse proxy or private access gateway.
+- Use `SECURE_COOKIES=true` when Argus is served through HTTPS by a trusted reverse proxy or private access gateway.
 - Do not expose it directly to the public internet without HTTPS and a trusted reverse proxy or private access layer.
 - Keep `.env`, `data/`, `logs/`, databases, uploads, generated media, backups, auth/session files, API keys, and model/provider tokens out of Git and private shares. They are ignored by default.
 - Review `data/auth.json` after first boot: disable open signup unless you intentionally want it, make only your own account admin, and keep demo/test accounts non-admin.
@@ -334,25 +334,25 @@ Odysseus is a self-hosted workspace with powerful local tools: shell access, fil
 - Rotate any API keys or tokens that were ever pasted into a shared chat, demo, screenshot, or log.
 - If you enable API tokens or webhooks, create separate tokens per integration and delete unused ones.
 - Prefer binding manual development runs to `127.0.0.1`; bind to `0.0.0.0` only when you intentionally want LAN/reverse-proxy access.
-- Keep ChromaDB, SearXNG, ntfy, Ollama, vLLM, llama.cpp, databases, and raw model/provider APIs internal-only. Expose only the authenticated Odysseus web/API entrypoint through your trusted proxy or private access layer.
+- Keep ChromaDB, SearXNG, ntfy, Ollama, vLLM, llama.cpp, databases, and raw model/provider APIs internal-only. Expose only the authenticated Argus web/API entrypoint through your trusted proxy or private access layer.
 - Before publishing a fork, run `git status --short` and confirm no private files from `.env`, `data/`, `logs/`, uploads, backups, or local databases are staged.
 
 ### Private or proxied deployments
-Odysseus serves plain HTTP on its app port. Docker Compose binds Odysseus and the bundled services to `127.0.0.1` by default, so a typical production/private setup is:
+Argus serves plain HTTP on its app port. Docker Compose binds Argus and the bundled services to `127.0.0.1` by default, so a typical production/private setup is:
 
-1. Keep Odysseus on localhost, for example `127.0.0.1:7000`.
+1. Keep Argus on localhost, for example `127.0.0.1:7000`.
 2. Terminate HTTPS at a trusted reverse proxy or private access gateway.
-3. Put the authenticated Odysseus web/API entrypoint behind that layer.
+3. Put the authenticated Argus web/API entrypoint behind that layer.
 4. Keep raw service and model ports internal-only.
 
-Cloudflare Access, Tailscale, Caddy, nginx, and Traefik can all fit this pattern; none are required by Odysseus. If your access layer reaches Odysseus on the same host, proxy to `http://127.0.0.1:7000` and keep `AUTH_ENABLED=true`, `LOCALHOST_BYPASS=false`, and `SECURE_COOKIES=true`.
+Cloudflare Access, Tailscale, Caddy, nginx, and Traefik can all fit this pattern; none are required by Argus. If your access layer reaches Argus on the same host, proxy to `http://127.0.0.1:7000` and keep `AUTH_ENABLED=true`, `LOCALHOST_BYPASS=false`, and `SECURE_COOKIES=true`.
 `ALLOWED_ORIGINS` lists exact permitted origins for cross-origin browser/API clients; ordinary same-origin reverse-proxy access usually does not need a special CORS entry.
 
 Common internal-only ports from the default docs/compose setup:
 
 | Port | Service |
 |---|---|
-| `7000` | Odysseus raw app port |
+| `7000` | Argus raw app port |
 | `8080` | SearXNG |
 | `8091` | ntfy |
 | `8100` | ChromaDB host port for manual/compose access |
@@ -378,25 +378,25 @@ Key settings:
 | `AUTH_ENABLED` | `true` | Enable/disable login |
 | `LOCALHOST_BYPASS` | `false` | Development-only auth bypass for loopback requests. Keep false for shared/network deployments. |
 | `ALLOWED_ORIGINS` | `http://localhost,http://127.0.0.1` | Comma-separated exact permitted origins for cross-origin browser/API clients. |
-| `SECURE_COOKIES` | `false` | Set true when serving Odysseus through HTTPS at a trusted proxy or private access gateway. |
+| `SECURE_COOKIES` | `false` | Set true when serving Argus through HTTPS at a trusted proxy or private access gateway. |
 | `DATABASE_URL` | `sqlite:///./data/app.db` | Database connection string |
 | `CHROMADB_HOST` | `localhost` | ChromaDB host for vector memory. Docker overrides this to `chromadb`. |
 | `CHROMADB_PORT` | `8100` | ChromaDB port for manual host runs. Docker overrides this to `8000`. |
 | `EMBEDDING_URL` | -- | OpenAI-compatible embeddings endpoint |
-| `ODYSSEUS_CHAT_UPLOAD_MAX_BYTES` | `10485760` | Chat/agent attachment cap in bytes. Raise for larger local PDFs or text documents. |
-| `ODYSSEUS_GALLERY_UPLOAD_MAX_BYTES` | `104857600` | Gallery image upload cap in bytes (100 MB). |
-| `ODYSSEUS_GALLERY_TRANSFORM_UPLOAD_MAX_BYTES` | `26214400` | Gallery transform input cap in bytes (25 MB). |
-| `ODYSSEUS_MEMORY_IMPORT_MAX_BYTES` | `10485760` | Memory import file cap in bytes (10 MB). |
-| `ODYSSEUS_PERSONAL_UPLOAD_MAX_BYTES` | `26214400` | Personal document upload cap in bytes (25 MB). |
-| `ODYSSEUS_EMAIL_COMPOSE_UPLOAD_MAX_BYTES` | `26214400` | Email compose attachment cap in bytes (25 MB). |
-| `ODYSSEUS_STT_MAX_AUDIO_BYTES` | `26214400` | Speech-to-text audio cap in bytes (25 MB). |
-| `ODYSSEUS_ICS_MAX_BYTES` | `10485760` | Calendar `.ics` import cap in bytes (10 MB). |
+| `ARGUS_CHAT_UPLOAD_MAX_BYTES` | `10485760` | Chat/agent attachment cap in bytes. Raise for larger local PDFs or text documents. |
+| `ARGUS_GALLERY_UPLOAD_MAX_BYTES` | `104857600` | Gallery image upload cap in bytes (100 MB). |
+| `ARGUS_GALLERY_TRANSFORM_UPLOAD_MAX_BYTES` | `26214400` | Gallery transform input cap in bytes (25 MB). |
+| `ARGUS_MEMORY_IMPORT_MAX_BYTES` | `10485760` | Memory import file cap in bytes (10 MB). |
+| `ARGUS_PERSONAL_UPLOAD_MAX_BYTES` | `26214400` | Personal document upload cap in bytes (25 MB). |
+| `ARGUS_EMAIL_COMPOSE_UPLOAD_MAX_BYTES` | `26214400` | Email compose attachment cap in bytes (25 MB). |
+| `ARGUS_STT_MAX_AUDIO_BYTES` | `26214400` | Speech-to-text audio cap in bytes (25 MB). |
+| `ARGUS_ICS_MAX_BYTES` | `10485760` | Calendar `.ics` import cap in bytes (10 MB). |
 
 All upload-limit vars are validated (must be a positive integer) and optional; an invalid value fails fast at startup.
 
 ### Built-in MCP servers (optional setup)
 
-Odysseus auto-registers a few built-in MCP servers at startup. The npx-based ones (currently the browser server, `@playwright/mcp`) only start when their npm package is already in the local npx cache. If a package isn't cached, that server is skipped with a startup log message explaining what to do, so a fresh install does not block on a multi-minute npm download or hang if Playwright system deps are missing.
+Argus auto-registers a few built-in MCP servers at startup. The npx-based ones (currently the browser server, `@playwright/mcp`) only start when their npm package is already in the local npx cache. If a package isn't cached, that server is skipped with a startup log message explaining what to do, so a fresh install does not block on a multi-minute npm download or hang if Playwright system deps are missing.
 
 To enable the browser MCP (page navigation, screenshots, vision), run once:
 
@@ -404,7 +404,7 @@ To enable the browser MCP (page navigation, screenshots, vision), run once:
 npx -y @playwright/mcp@latest --version
 ```
 
-That installs `@playwright/mcp` plus Playwright (~300MB total). Restart Odysseus and the server will register at startup.
+That installs `@playwright/mcp` plus Playwright (~300MB total). Restart Argus and the server will register at startup.
 
 ## Architecture
 ```
